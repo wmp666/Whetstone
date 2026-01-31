@@ -1,22 +1,34 @@
 package com.wmp.test;
 
 
-import com.wmp.PublicTools.windowsAPI.User32;
+import com.wmp.PublicTools.windowsAPI.BlurGlassEffect;
+import com.wmp.PublicTools.windowsAPI.DesktopAppEnumerator;
+import com.wmp.PublicTools.windowsAPI.DisableGlassEffect;
+
+import java.util.List;
 
 public class WindowsAPITest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        //模拟按下
-        User32.INSTANCE.keybd_event((byte) 0x5B, (byte) 0, 0x0000, 0);
-
-        // 短暂延迟
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        {
+            List<DesktopAppEnumerator.WindowInfo> windowInfoList = DesktopAppEnumerator.getVisibleWindows();
+            for (DesktopAppEnumerator.WindowInfo windowInfo : windowInfoList) {
+                System.out.println(windowInfo.title);
+                BlurGlassEffect.setWindowLayered(windowInfo.hwnd);
+                BlurGlassEffect.enableDwmGlassEffect(windowInfo.hwnd);
+            }
         }
 
-        //模拟松开
-        User32.INSTANCE.keybd_event((byte) 0x5B, (byte) 0, 0x0002, 0);
+        Thread.sleep(5000);
+
+        {
+            List<DesktopAppEnumerator.WindowInfo> windowInfoList = DesktopAppEnumerator.getVisibleWindows();
+            for (DesktopAppEnumerator.WindowInfo windowInfo : windowInfoList) {
+                DisableGlassEffect.disableAllGlassEffects(windowInfo.hwnd);
+            }
+        }
+
     }
+
+
 }
