@@ -8,8 +8,8 @@
     <orderEntry type="jdk" jdkName="25" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="json-20210307" level="project" />
-    <orderEntry type="library" name="formdev.flatlaf" level="project" />
     <orderEntry type="library" name="atlassian.commonmark" level="project" />
     <orderEntry type="library" name="cn.6tail.lunar" level="project" />
+    <orderEntry type="library" name="net.java.dev.jna.platform" level="project" />
   </component>
 </module>

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Log {
-    public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/icon/icon.png"), 48, 48, false).getImage(), "ClassTools");
+    public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), "???");
 
     public static InfoLogStyle info = new InfoLogStyle(LogStyle.INFO);
     public static WarnLogStyle warn = new WarnLogStyle(LogStyle.WARN);
@@ -27,6 +27,16 @@ public class Log {
                 systemTray.add(trayIcon);
             } catch (AWTException e) {
                 throw new RuntimeException(e);
+            }
+
+            for (int i = 0; i < 49; i++) {
+                TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i));
+                tempTrayIcon.setImageAutoSize(true);
+                try {
+                    systemTray.add(tempTrayIcon);
+                } catch (AWTException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
