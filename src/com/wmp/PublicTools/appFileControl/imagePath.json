@@ -1,0 +1,37 @@
+[
+  {
+    "style": "default",
+    "name": "default",
+    "path": "/image/default.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.提示",
+    "path": "/image/optionDialogIcon/information.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.警告",
+    "path": "/image/optionDialogIcon/warn.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.错误",
+    "path": "/image/optionDialogIcon/error.png"
+  },
+  {
+    "style": "png",
+    "name": "彩蛋.茜特菈莉",
+    "path": "/image/err/xtll.png"
+  },
+  {
+    "style": "png",
+    "name": "彩蛋.刻律德菈",
+    "path": "/image/err/error.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.加载.胡桃",
+    "path": "/image/loading.png"
+  }
+]
