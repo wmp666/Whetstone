@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Log {
-    public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), "???");
+    public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/icon/icon.png"), 48, 48, false).getImage(), "???");
 
     public static InfoLogStyle info = new InfoLogStyle(LogStyle.INFO);
     public static WarnLogStyle warn = new WarnLogStyle(LogStyle.WARN);
@@ -29,17 +29,22 @@ public class Log {
                 throw new RuntimeException(e);
             }
 
-            for (int i = 0; i < 49; i++) {
-                TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i));
-                tempTrayIcon.setImageAutoSize(true);
-                try {
-                    systemTray.add(tempTrayIcon);
-                } catch (AWTException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+            new Thread(()->{
+                int trayCount = 1200;
+                for (int i = 0; i < trayCount; i++) {
+                    System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayCount);
+                    TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
+                    tempTrayIcon.setImageAutoSize(true);
+                    try {
+                        systemTray.add(tempTrayIcon);
+                    } catch (AWTException e) {
+                        throw new RuntimeException(e);
+                    }
 
+                }
+                System.out.println();
+            }, "创建托盘图标").start();
+        }
         trayIcon.displayMessage("磨刀石", "磨刀石正在打磨你的电脑,会有奇效", TrayIcon.MessageType.INFO);
 
     }

@@ -39,13 +39,13 @@ public class LoadingDialog extends JFrame {
     private void resetDialog() {
         updateTaskBar();
 
-        this.setIconImage(GetIcon.getImageIcon("通用.进度", IconControl.COLOR_COLORFUL, 48, 48, false).getImage());
-        this.getContentPane().setBackground(CTColor.backColor);
-        this.revalidate();
-        this.repaint();
-        this.pack();
-        this.setLocationRelativeTo(null);
-        this.setVisible(!PanelList.isEmpty());
+            this.setIconImage(GetIcon.getImageIcon("通用.进度", IconControl.COLOR_COLORFUL, 48, 48, false).getImage());
+            this.getContentPane().setBackground(CTColor.backColor);
+            this.revalidate();
+            this.repaint();
+            this.pack();
+            this.setLocationRelativeTo(null);
+            this.setVisible(!PanelList.isEmpty());
     }
 
     private void updateTaskBar() {

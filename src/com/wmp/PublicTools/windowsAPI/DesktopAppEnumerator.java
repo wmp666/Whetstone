@@ -47,9 +47,9 @@ public class DesktopAppEnumerator {
         // 4. 基础过滤（可根据需要调整）
         if (!title.isEmpty() && !className.isEmpty()) {
             // 过滤掉一些已知的系统窗口类，如任务栏、桌面等
-            if (!className.equals("Shell_TrayWnd") && !className.equals("Progman")) {
+            //if (!className.equals("Shell_TrayWnd") && !className.equals("Progman")) {
                 windowList.add(new WindowInfo(hWnd, title, className));
-            }
+            //}
         }
         return true; // 继续枚举
     };

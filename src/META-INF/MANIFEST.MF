@@ -1,3 +1,5 @@
 Manifest-Version: 1.0
 Main-Class: com.wmp.Main
+Class-Path: commonmark-0.17.0.jar jna-platform-5.18.1.jar jna-5.18.1.jar
+  lunar-1.7.7.jar json-20210307.jar
 

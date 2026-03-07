@@ -12,6 +12,7 @@ public class CTFont {
 
     private static int BigBigSize = 100;
     private static int moreBigSize = 60;
+    private static int middleBigSize = 40;
     private static int bigSize = 24;
     private static int normalSize = 19;
     private static int smallSize = 15;
@@ -23,6 +24,7 @@ public class CTFont {
         switch (sizeStyle) {
             case BIG_BIG -> size = BigBigSize;
             case MORE_BIG -> size = moreBigSize;
+            case MIDDLE_BIG -> size = middleBigSize;
             case BIG -> size = bigSize;
             case NORMAL -> size = normalSize;
             case SMALL -> size = smallSize;
@@ -36,6 +38,7 @@ public class CTFont {
         switch (sizeStyle) {
             case BIG_BIG -> size = BigBigSize;
             case MORE_BIG -> size = moreBigSize;
+            case MIDDLE_BIG -> size = middleBigSize;
             case BIG -> size = bigSize;
             case NORMAL -> size = normalSize;
             case SMALL -> size = smallSize;
@@ -75,9 +78,10 @@ public class CTFont {
         CTFont.fontName = fontName;
     }
 
-    public static void setSize(int bigBigSize, int moreBigSize, int bigSize, int normalSize, int smallSize, int moreSmallSize) {
+    public static void setSize(int bigBigSize, int moreBigSize, int middleBigSize, int bigSize, int normalSize, int smallSize, int moreSmallSize) {
         CTFont.BigBigSize = bigBigSize;
         CTFont.moreBigSize = moreBigSize;
+        CTFont.middleBigSize = middleBigSize;
         CTFont.bigSize = bigSize;
         CTFont.normalSize = normalSize;
         CTFont.smallSize = smallSize;
@@ -90,11 +94,11 @@ public class CTFont {
      * @return BigBigSize, moreBigSize, bigSize, normalSize, smallSize, moreSmallSize
      */
     public static int[] getBasicSize() {
-        return new int[]{BigBigSize, moreBigSize, bigSize, normalSize, smallSize, moreSmallSize};
+        return new int[]{BigBigSize, moreBigSize, middleBigSize, bigSize, normalSize, smallSize, moreSmallSize};
     }
 
     public static int[] getSize() {
-        return new int[]{(int) (BigBigSize * CTInfo.dpi), (int) (moreBigSize * CTInfo.dpi), (int) (bigSize * CTInfo.dpi), (int) (normalSize * CTInfo.dpi), (int) (smallSize * CTInfo.dpi), (int) (moreSmallSize * CTInfo.dpi)};
+        return new int[]{(int) (BigBigSize * CTInfo.dpi), (int) (moreBigSize * CTInfo.dpi), (int) (middleBigSize * CTInfo.dpi), (int) (bigSize * CTInfo.dpi), (int) (normalSize * CTInfo.dpi), (int) (smallSize * CTInfo.dpi), (int) (moreSmallSize * CTInfo.dpi)};
     }
 
     public static int getSize(CTFontSizeStyle index) {
@@ -102,6 +106,7 @@ public class CTFont {
         switch (index) {
             case BIG_BIG -> size = BigBigSize;
             case MORE_BIG -> size = moreBigSize;
+            case MIDDLE_BIG -> size = middleBigSize;
             case BIG -> size = bigSize;
             case NORMAL -> size = normalSize;
             case SMALL -> size = smallSize;

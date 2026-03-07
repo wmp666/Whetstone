@@ -62,7 +62,6 @@ public abstract class CTViewPanel<T> extends CTPanel {
      */
     public void setIndependentRefresh(boolean independentRefresh, int delay) {
         this.independentRefresh = independentRefresh;
-
         if (independentRefresh) {
             refreshTimer.setDelay(delay);
             refreshTimer.start();

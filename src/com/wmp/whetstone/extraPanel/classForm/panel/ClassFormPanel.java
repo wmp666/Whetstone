@@ -1,12 +1,8 @@
 package com.wmp.whetstone.extraPanel.classForm.panel;
 
 import com.wmp.PublicTools.CTInfo;
-import com.wmp.PublicTools.UITools.CTColor;
-import com.wmp.PublicTools.UITools.CTFont;
-import com.wmp.PublicTools.UITools.CTFontSizeStyle;
-import com.wmp.PublicTools.UITools.PeoPanelProcess;
+import com.wmp.PublicTools.UITools.*;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
-import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.PublicTools.windowsAPI.BlurGlassEffect;
@@ -14,20 +10,18 @@ import com.wmp.PublicTools.windowsAPI.DesktopAppEnumerator;
 import com.wmp.PublicTools.windowsAPI.DisableGlassEffect;
 import com.wmp.PublicTools.windowsAPI.WinAPIEntireFunction;
 import com.wmp.whetstone.CTComponent.CTPanel.CTViewPanel;
-import com.wmp.whetstone.CTComponent.CTProgressBar.LoadingDialog;
 import com.wmp.whetstone.extraPanel.classForm.CFInfoControl;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfo;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfos;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
@@ -70,59 +64,44 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                 // 使用 Objects.equals 来安全比较，避免 NullPointerException
                 if (!Objects.equals(oldNowClassName, nowClass.className()) ||
                         !Objects.equals(oldNextClassName, nextClass)) {
-                    if (nowClass.className().contains("数学") ||
-                            nowClass.className().contains("班会") ||
-                            nowClass.className().contains("劳动")) {
-                        //创建一个robot对象
-                        Robot robut = new Robot();
-                        //获取屏幕分辨率
-                        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-                        //打印屏幕分辨率
-                        System.out.println(d);
-                        //创建该分辨率的矩形对象
-                        Rectangle screenRect = new Rectangle(d);
-                        //根据这个矩形截图
-                        BufferedImage bufferedImage = robut.createScreenCapture(screenRect);
 
-                        JDialog dialog = new JDialog();
-                        dialog.setUndecorated(true);
-                        dialog.setAlwaysOnTop(true);
+                    if (nowClass.className().equals("无")){
 
-                        JLabel image = new JLabel(new ImageIcon(bufferedImage));
-                        dialog.add(image);
-
-                        dialog.pack();
-                        new Thread(() -> {
-
-
-                            dialog.setVisible(true);
-
-                            SwingUtilities.invokeLater(() -> {
-
-                                try {
-                                    Thread.sleep(30 * 1000);
-                                } catch (InterruptedException e) {
-                                    throw new RuntimeException(e);
+                    }else{
+                        ClassFormInfo finalNowClass = nowClass;
+                        new Thread(()->{
+                            try {
+                                //U盘助手
+                                if (!containsTheClass(finalNowClass, "生物", "语文")){
+                                    UHelper();
                                 }
 
-                                dialog.setVisible(false);
-                            });
-                        }).start();
+                                //锤子
+                                if (containsTheClass(finalNowClass, "体育")) {
+                                    happenError();
+                                }
+
+                                //全屏遮挡
+                                if (containsTheClass(finalNowClass, "数学", "班会", "劳动", "晨会")) {
+                                    screenBlocking();
+                                }
+
+                                //NJ接管
+                                if (containsTheClass(finalNowClass, "语文", "英语", "物理", "生物", "体育")) {
+                                    banZhuRenChuMo();
+                                }
+
+                                //窗口透明
+                                if (containsTheClass(finalNowClass, "英语", "物理", "化学", "体育")) {
+                                    setAllFrameGlass();
+                                }
+                            } catch (Exception _) {
+                                Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
+                            }
+                        }, "彩蛋启动!").start();
                     }
-                    else if (nowClass.className().contains("政治") ||
-                            nowClass.className().contains("美术") ||
-                            nowClass.className().contains("音乐") ||
-                            nowClass.className().contains("通用") ||
-                            nowClass.className().contains("体育") ||
-                            nowClass.className().contains("信息")) {
-                        happenError();
-                    }
-                    else if (nowClass.className().contains("物理")) {
-                        setAllFrameGlass();
-                    }
-                    else if (nowClass.className().contains("语文")) {
-                        banZhuRenChuMo();
-                    }
+
+
                 }
 
 
@@ -136,35 +115,108 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
             }
 
 
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.gridx = 0;
-            gbc.gridy = 0;
 
-            JLabel titleLabel = new JLabel("<html>本节课:</html>");
-            titleLabel.setForeground(CTColor.textColor);
-            titleLabel.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.NORMAL));
-            this.add(titleLabel, gbc);
-
-            gbc.gridy++;
-            this.add(PeoPanelProcess.getShowPeoPanel(List.of(nowClass == null ? "无" : nowClass.className())), gbc);
-
-            JLabel titleLabel2 = new JLabel("<html>下节课:</html>");
-            titleLabel2.setForeground(CTColor.textColor);
-            titleLabel2.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.NORMAL));
-            gbc.gridy++;
-            this.add(titleLabel2, gbc);
-
-            gbc.gridy++;
-            this.add(PeoPanelProcess.getShowPeoPanel(List.of(nextClass.equals("无") ? "无" : String.format("%s(%s分钟)", nextClass, nextClassInfo.time()))), gbc);
-
-
-            this.revalidate();
-            this.repaint();
         }
     }
 
-    private static void happenError() throws InterruptedException, IOException {
+    private static void screenBlocking() throws Exception {
+
+        Thread.sleep((new Random().nextInt(3) + 1)*60*1000);
+
+        //创建一个robot对象
+        Robot robut = new Robot();
+        //获取屏幕分辨率
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        //打印屏幕分辨率
+        System.out.println(d);
+        //创建该分辨率的矩形对象
+        Rectangle screenRect = new Rectangle(d);
+        //根据这个矩形截图
+        BufferedImage bufferedImage = robut.createScreenCapture(screenRect);
+
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
+        dialog.setAlwaysOnTop(true);
+
+        final boolean[] b = {false};
+        Object temp = 0;
+        Runnable r = () -> {
+            synchronized (temp){
+                if (b[0]) return;
+                b[0] = true;
+                try {
+                    Thread.sleep(10 * 1000);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                dialog.setVisible(false);
+            }
+        };
+
+        JLabel image = new JLabel(new ImageIcon(bufferedImage));
+        image.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+                r.run();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                r.run();
+            }
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                r.run();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                r.run();
+            }
+        });
+        dialog.add(image);
+
+        dialog.pack();
+
+        SwingUtilities.invokeLater(() -> {
+            dialog.setVisible(true);
+
+        });
+    }
+
+    public static void happenError() throws InterruptedException, IOException {
+
+        System.out.println(1);
+        {
+            JDialog frame = new JDialog();
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frame.setUndecorated(true);
+            frame.setAlwaysOnTop(true);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException _) {
+                    }
+                    e.getWindow().setVisible(false);
+                }
+            });
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+            JLabel label = new JLabel(GetIcon.getIcon(ClassFormPanel.class.getResource("/image/cxx.jpg"), screenSize.width, screenSize.height, false));
+            frame.add(label);
+
+            frame.pack();
+            frame.setLocation(0, 0);
+
+            frame.setVisible(true);
+        }
+
         WinAPIEntireFunction.invertScreenWithJNA();
 
         for (int i = 0; i < 5; i++) {
@@ -187,17 +239,42 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
         WinAPIEntireFunction.clearInvertScreen();
     }
 
-    private static void setAllFrameGlass() throws InterruptedException {
-        {
-            List<DesktopAppEnumerator.WindowInfo> windowInfoList = DesktopAppEnumerator.getVisibleWindows();
-            for (DesktopAppEnumerator.WindowInfo windowInfo : windowInfoList) {
-                System.out.println(windowInfo.title);
-                BlurGlassEffect.setWindowLayered(windowInfo.hwnd);
-                BlurGlassEffect.enableDwmGlassEffect(windowInfo.hwnd);
-            }
-        }
+    public static void UHelper(){
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "Uhelper.exe");
 
-        Thread.sleep(5000);
+
+        //Desktop.getDesktop().open(new java.io.File(CTInfo.TEMP_PATH + "\\Whetstone\\chuizis.exe"));
+        new Thread(()->{
+            try {
+                for(int i = 0;i < 3;i++){
+                    Process process = Runtime.getRuntime().exec(new String[]{CTInfo.TEMP_PATH + "\\Whetstone\\Uhelper.exe"});
+                    int status = process.waitFor();
+
+                Log.info.print(ClassFormPanel.class.toString(), "UHelper.exe关闭：" + status);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }, "U盘助手").start();
+
+    }
+
+    public static void setAllFrameGlass() throws InterruptedException {
+
+        Thread.sleep((new Random().nextInt(3) + 1)*60*1000);
+
+        for (int i = 0; i < 50; i++) {
+            {
+                List<DesktopAppEnumerator.WindowInfo> windowInfoList = DesktopAppEnumerator.getVisibleWindows();
+                for (DesktopAppEnumerator.WindowInfo windowInfo : windowInfoList) {
+                    System.out.println(windowInfo.title);
+                    BlurGlassEffect.setWindowLayered(windowInfo.hwnd);
+                    BlurGlassEffect.enableDwmGlassEffect(windowInfo.hwnd);
+                }
+            }
+
+            Thread.sleep(2*1000);
+        }
 
         {
             List<DesktopAppEnumerator.WindowInfo> windowInfoList = DesktopAppEnumerator.getVisibleWindows();
@@ -208,97 +285,77 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
     }
 
     public static void banZhuRenChuMo() {
-        LoadingDialog loadingDialog = new LoadingDialog();
+        Log.trayIcon.displayMessage("班主任", "班主任已成功监管电脑,不要搞小动作", TrayIcon.MessageType.WARNING);
 
-        loadingDialog.showDialog("错误", "异常程序已注入电脑桌面");
-
-        loadingDialog.showDialog("修复", "正在启动修复程序...");
-
-        try {
-            loadingDialog.updateDialog("修复", "开始扫描程序文件...");
-            {
-                AtomicInteger count = new AtomicInteger(0);
-                Path appPath = Path.of(GetPath.getAppPath(GetPath.APPLICATION_PATH));
-                long fileCount = Files.walk(appPath)
-                        .count();
-
-                if (fileCount > 0) {
-                    Files.walk(appPath)
-                            .sorted()
-                            .map(Path::toFile)
-                            .forEach(file -> {
-                                int currentCount = count.incrementAndGet();
-                                double percentage = (currentCount * 100.0) / fileCount;
-                                int progress = (int) Math.round(percentage);
-                                loadingDialog.updateDialog("修复",
-                                        String.format("开始扫描程序文件%.2f%%", percentage),
-                                        progress);
-                            });
+        {
+            JDialog frame = new JDialog();
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frame.setUndecorated(true);
+            frame.setAlwaysOnTop(true);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException _) {
+                    }
+                    e.getWindow().setVisible(false);
                 }
-            }
+            });
 
-            loadingDialog.updateDialog("修复", "正在扫描数据文件...");
-            {
-                AtomicInteger count = new AtomicInteger(0);
-                Path dataPath = Path.of(CTInfo.TEMP_PATH).getParent();
-                long fileCount = Files.walk(dataPath)
-                        .count();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-                if (fileCount > 0) {
-                    Files.walk(dataPath)
-                            .sorted()
-                            .map(Path::toFile)
-                            .forEach(file -> {
-                                int currentCount = count.incrementAndGet();
-                                double percentage = (currentCount * 100.0) / fileCount;
-                                int progress = (int) Math.round(percentage);
-                                loadingDialog.updateDialog("修复",
-                                        String.format("开始扫描数据文件%.2f%%", percentage),
-                                        progress);
-                            });
-                }
-            }
-        } catch (Exception _) {
+            JLabel label = new JLabel(GetIcon.getIcon(ClassFormPanel.class.getResource("/image/nj_dunk_2.png"), screenSize.width, screenSize.height, false));
+            frame.add(label);
+
+
+            frame.pack();
+            frame.setLocation(0, 0);
+
+            frame.setVisible(true);
         }
 
-        loadingDialog.updateDialog("修复", "正在修复文件...", -1);
-        {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException _) {
 
-            }
-            loadingDialog.updateDialog("修复", "修复出错!");
-            loadingDialog.updateDialog("错误", "修复被异常程序阻止!", -1);
-        }
 
-        loadingDialog.updateDialog("修复", "修复出错,正在准备重启电脑", -1);
-
-        loadingDialog.showDialog("班主任", "正在修改修复程序");
-        {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException _) {
-
-            }
-            loadingDialog.updateDialog("班主任", "已阻断修复程序");
-            loadingDialog.closeDialog("修复");
-
-            loadingDialog.closeDialog("错误");
-        }
-
-        loadingDialog.updateDialog("班主任", "<html>接下来班主任将会盯着你们上课的,<br>不要有小动作</html>");
-        {
-            for (int i = 0; i < 100; i++) {
-                loadingDialog.updateDialog("班主任", i);
+        JDialog frame = new JDialog(new Frame(), "班主任");
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setUndecorated(true);
+        frame.setAlwaysOnTop(true);
+        frame.setBackground(new Color(0,0,0,0));
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(20*60*1000);
                 } catch (InterruptedException _) {
-
                 }
+                e.getWindow().setVisible(false);
             }
-        }
+        });
 
-        loadingDialog.closeDialog("班主任");
+        JLabel label = new JLabel("班主任正在视奸...");
+        label.setForeground(CTColor.mainColor);
+        label.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.BIG));
+        frame.add(label);
+
+        ((JPanel)frame.getContentPane()).setOpaque(false);
+
+        frame.pack();
+        frame.setLocation((int) (100 *CTInfo.dpi), (int) (100 *CTInfo.dpi));
+
+        frame.setVisible(true);
+    }
+
+    /**
+     * 判断<code>classFormInfo</code>对应的课程是否在<code>classes</code>列表中
+     * @param classFormInfo 课程
+     * @param classes 课程列表
+     * @return 若<code>classes</code>列表中的一项包含<code>classFormInfo</code>对应的课程,则返回<code>true</code>
+     */
+    private static boolean containsTheClass(ClassFormInfo classFormInfo, String... classes){
+        for (String aClass : classes) {
+            if (classFormInfo.className().contains(aClass)) return true;
+        }
+        return false;
     }
 }

@@ -18,7 +18,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "1.3.0";
+    public static final String version = "1.5.1";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Main {
         allArgs.put("EasterEgg:notShow", StartupParameters.creative("/EasterEgg:notShow", "-EasterEgg:notShow"));
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         System.out.println("版本：" + version);
         if (args.length > 0) {
             argsList = new ArrayList<>(Arrays.asList(args));
@@ -53,7 +53,13 @@ public class Main {
 
         Log.info.print("Main", "初始化完毕");
 
-
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                Thread.sleep(24*60*60*1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }));
     }
 
     /**
