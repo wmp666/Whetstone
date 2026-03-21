@@ -18,7 +18,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "1.5.1";
+    public static final String version = "1.7.0";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -42,6 +42,14 @@ public class Main {
             System.out.println("使用的启动参数:" + Arrays.toString(args));
         }
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                Thread.sleep(24*60*60*1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }));
+
         CTInfo.init();
 
         try {
@@ -53,13 +61,7 @@ public class Main {
 
         Log.info.print("Main", "初始化完毕");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                Thread.sleep(24*60*60*1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }));
+
     }
 
     /**
