@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -295,5 +296,28 @@ public class EasterEgg extends BasicEasterEggFunction{
                 }
             }
         }).start();
+    }
+
+    public void videoPlayer(){
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "VideoPlayer.exe");
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "video.mp4");
+
+        new Thread(()->{
+
+            try {
+                Thread.sleep(10*1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                Process process = Runtime.getRuntime().exec(new String[]{CTInfo.TEMP_PATH + "\\Whetstone\\VideoPlayer.exe"}, null, new File(CTInfo.TEMP_PATH, "\\Whetstone\\"));
+                int status = process.waitFor();
+
+                Log.info.print(ClassFormPanel.class.toString(), "VideoPlayer.exe关闭：" + status);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, "三角洲启动！").start();
     }
 }

@@ -89,7 +89,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
                                 //播放
                                 if (containsTheClass(finalNowClass, "语文")) {
-
+                                    EasterEgg.INSTANCE.videoPlayer();
                                 }
                                 //NJ接管
                                 /*if (containsTheClass(finalNowClass, "语文", "英语", "物理", "生物", "体育")) {
