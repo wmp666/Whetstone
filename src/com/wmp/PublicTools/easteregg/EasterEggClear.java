@@ -22,7 +22,7 @@ public class EasterEggClear extends BasicEasterEggFunction{
      * @param count 无效参数
      */
     @Override
-    public void UHelper(int count) throws Exception {
+    public void UHelper(int count){
         //关闭U盘助手线程
         Thread.getAllStackTraces()
                 .keySet()
@@ -41,7 +41,12 @@ public class EasterEggClear extends BasicEasterEggFunction{
     }
 
     @Override
-    public void banZhuRenChuMo() throws Exception {
+    public void banZhuRenChuMo(){
+
+    }
+
+    @Override
+    public void reStartExplorer() {
 
     }
 }

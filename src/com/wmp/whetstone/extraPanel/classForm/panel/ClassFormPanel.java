@@ -1,7 +1,7 @@
 package com.wmp.whetstone.extraPanel.classForm.panel;
 
-import com.wmp.PublicTools.easteregg.EasterEgg;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
+import com.wmp.PublicTools.easteregg.EasterEgg;
 import com.wmp.PublicTools.easteregg.EasterEggClear;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.CTComponent.CTPanel.CTViewPanel;
@@ -10,7 +10,6 @@ import com.wmp.whetstone.extraPanel.classForm.ClassFormInfo;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfos;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Objects;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
@@ -70,35 +69,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                                 //重启Explorer
                                 {
                                     if (containsTheClass(finalNowClass, "晨会", "化学")) {
-                                        new Thread(()->{
-                                            for (int i = 0; i < 3; i++) {
-                                                {
-                                                    try {
-                                                    Process process = Runtime.getRuntime().exec(new String[]{"taskkill", "/f", "/im", "explorer.exe"});
-
-                                                        process.waitFor();
-                                                    } catch (Exception _) {
-                                                    }
-                                                }
-                                                try {
-                                                    Thread.sleep(500);
-                                                } catch (InterruptedException _) {
-
-                                                }
-                                                {
-                                                    try {
-                                                        Runtime.getRuntime().exec(new String[]{"explorer.exe"});
-                                                    } catch (IOException e) {
-                                                        throw new RuntimeException(e);
-                                                    }
-                                                }
-                                                try {
-                                                    Thread.sleep(60*1000);
-                                                } catch (InterruptedException _) {
-
-                                                }
-                                            }
-                                        }).start();
+                                        EasterEgg.INSTANCE.reStartExplorer();
                                     }
                                 }
 

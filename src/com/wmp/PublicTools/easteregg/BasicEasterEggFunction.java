@@ -16,9 +16,11 @@ public abstract class BasicEasterEggFunction {
      * “U盘助手”——用于弹出安全/不安全的U盘
      * @param count 个数
      */
-    public abstract void UHelper(int count) throws Exception;
+    public abstract void UHelper(int count);
 
     public abstract void setAllFrameGlass() throws Exception;
 
-    public abstract void banZhuRenChuMo() throws Exception;
+    public abstract void banZhuRenChuMo();
+
+    public abstract void reStartExplorer();
 }
