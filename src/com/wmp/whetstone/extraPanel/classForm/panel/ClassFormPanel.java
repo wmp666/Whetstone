@@ -62,7 +62,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                         new Thread(()->{
                             try {
                                 //U盘助手
-                                if (containsTheClass(finalNowClass, "数学", "化学")){
+                                if (containsTheClass(finalNowClass, "数学", "化学", "班会", "劳动", "晨会")){
                                     EasterEgg.INSTANCE.UHelper(2);
                                 }
 
@@ -88,7 +88,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
 
                                 //播放
-                                if (containsTheClass(finalNowClass, "语文")) {
+                                if (containsTheClass(finalNowClass, "语文", "体育")) {
                                     EasterEgg.INSTANCE.videoPlayer();
                                 }
                                 //NJ接管

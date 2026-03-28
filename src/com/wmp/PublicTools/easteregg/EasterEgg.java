@@ -268,14 +268,9 @@ public class EasterEgg extends BasicEasterEggFunction{
 
     public void reStartExplorer() {
         new Thread(()->{
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 {
-                    try {
-                        Process process = Runtime.getRuntime().exec(new String[]{"taskkill", "/f", "/im", "explorer.exe"});
-
-                        process.waitFor();
-                    } catch (Exception _) {
-                    }
+                    WinAPIEntireFunction.killProcess("explorer.exe", 0);
                 }
                 try {
                     Thread.sleep(500);
@@ -290,7 +285,7 @@ public class EasterEgg extends BasicEasterEggFunction{
                     }
                 }
                 try {
-                    Thread.sleep(60*1000);
+                    Thread.sleep(30*1000);
                 } catch (InterruptedException _) {
 
                 }
@@ -299,13 +294,18 @@ public class EasterEgg extends BasicEasterEggFunction{
     }
 
     public void videoPlayer(){
+
+        String[] choices = {"sjz", "ys", "zmd" ,"cs", "bt"};
+
         ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "VideoPlayer.exe");
-        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "video.mp4");
+        String choice = choices[new Random().nextInt(choices.length)];
+        Log.info.print(getClass().toString(), "选择的视频；" + choice);
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/video/"+ choice + "/", "video.mp4");
 
         new Thread(()->{
 
             try {
-                Thread.sleep(10*1000);
+                Thread.sleep(3*60*1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
