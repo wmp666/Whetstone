@@ -49,4 +49,9 @@ public class EasterEggClear extends BasicEasterEggFunction{
     public void reStartExplorer() {
 
     }
+
+    @Override
+    public void videoPlayer() {
+
+    }
 }

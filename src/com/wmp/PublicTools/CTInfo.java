@@ -5,11 +5,15 @@ import com.wmp.PublicTools.appFileControl.IconControl;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfo;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfoControl;
 import com.wmp.PublicTools.printLog.Log;
+import com.wmp.recording.tools.GetRecordingInfo;
 
+import javax.sound.sampled.Mixer;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 
 public class CTInfo {
     public static double dpi = 1.0;
@@ -38,6 +42,19 @@ public class CTInfo {
 
         initCTBasicInfo();
 
+        List<Mixer.Info> infos = GetRecordingInfo.enumerateInputDevices();
+        StringBuilder sb = new StringBuilder();
+        infos.forEach(info ->{
+            sb.append(info.getName()).append("\n");
+        });
+        try {
+            File file = new File(TEMP_PATH, "Whetstone\\Recording\\MixerInfos.txt");
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            Files.write(file.toPath(), sb.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void initCTRunImportInfo() {

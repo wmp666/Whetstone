@@ -23,4 +23,7 @@ public abstract class BasicEasterEggFunction {
     public abstract void banZhuRenChuMo();
 
     public abstract void reStartExplorer();
+
+    public abstract void videoPlayer();
+
 }

@@ -320,4 +320,5 @@ public class EasterEgg extends BasicEasterEggFunction{
             }
         }, "三角洲启动！").start();
     }
+
 }

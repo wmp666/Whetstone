@@ -1,21 +1,32 @@
 package com.wmp.whetstone.extraPanel.classForm.panel;
 
+import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
 import com.wmp.PublicTools.easteregg.EasterEgg;
 import com.wmp.PublicTools.easteregg.EasterEggClear;
+import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
+import com.wmp.recording.main.Recording;
+import com.wmp.recording.tools.GetRecordingInfo;
 import com.wmp.whetstone.CTComponent.CTPanel.CTViewPanel;
 import com.wmp.whetstone.extraPanel.classForm.CFInfoControl;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfo;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfos;
+import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
     private String oldNowClassName = "无";
     private String oldNextClassName = "无";
+
+    private static AtomicReference<Recording.Info> recordingInfo = new AtomicReference<>();
 
 
     public ClassFormPanel() {
@@ -54,11 +65,16 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                 if (!Objects.equals(oldNowClassName, nowClass.className()) ||
                         !Objects.equals(oldNextClassName, nextClass)) {
 
+                    ClassFormInfo finalNowClass = nowClass;
+
                     if (nowClass.className().equals("无")){
                         //清理彩蛋
                         EasterEggClear.INSTANCE.UHelper(0);
+
+
+
                     }else{
-                        ClassFormInfo finalNowClass = nowClass;
+
                         new Thread(()->{
                             try {
                                 //U盘助手
@@ -104,8 +120,51 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                                 Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
                             }
                         }, "彩蛋启动!").start();
+
+
                     }
 
+                    if (recordingInfo.get() != null){
+                        Recording.stop(recordingInfo.get());
+                    }
+
+                    //生成路径+名字
+                    StringBuffer sb = new StringBuffer("Whetstone\\recording\\");
+
+                    SimpleDateFormat date = new SimpleDateFormat("yyyy_MM_dd");
+                    sb.append(date.format(new Date())).append("\\");
+
+                    SimpleDateFormat time = new SimpleDateFormat("HH_mm");
+                    sb.append(time.format(new Date())).append("_");
+
+                    sb.append(finalNowClass.className()).
+                            append(".wav");
+
+                    new Thread(()->{
+                        {
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject = new JSONObject(
+                                        IOForInfo.getInfos(new File(CTInfo.DATA_PATH, "Whetstone\\recording.json").toURI().toURL()));
+                            } catch (Exception _) {
+                            }
+
+                            if (jsonObject.has("mixerInfo")) {
+                                JSONObject finalJsonObject = jsonObject;
+                                GetRecordingInfo.enumerateInputDevices().forEach(info ->{
+                                    if (info.getName().equals(finalJsonObject.getString("mixerInfo"))){
+                                        Recording.Info tempInfo = Recording.create(info);
+                                        recordingInfo.set(tempInfo);
+                                    }
+                                });
+                            }
+                        }
+
+                        Recording.recording(
+                                new File(CTInfo.TEMP_PATH, sb.toString()),
+                                recordingInfo.get());
+
+                    }, "录音线程" + sb).start();
 
                 }
 
