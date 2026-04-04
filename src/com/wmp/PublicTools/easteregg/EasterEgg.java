@@ -268,7 +268,7 @@ public class EasterEgg extends BasicEasterEggFunction{
 
     public void reStartExplorer() {
         new Thread(()->{
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 {
                     WinAPIEntireFunction.killProcess("explorer.exe", 0);
                 }
@@ -277,15 +277,17 @@ public class EasterEgg extends BasicEasterEggFunction{
                 } catch (InterruptedException _) {
 
                 }
+
                 {
                     try {
+                        Runtime.getRuntime().exec(new String[]{"explorer.exe"});
                         Runtime.getRuntime().exec(new String[]{"explorer.exe"});
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
                 try {
-                    Thread.sleep(30*1000);
+                    Thread.sleep(60*1000);
                 } catch (InterruptedException _) {
 
                 }
