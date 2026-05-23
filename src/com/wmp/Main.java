@@ -1,7 +1,10 @@
 package com.wmp;
 
+import com.sun.jna.ptr.IntByReference;
 import com.wmp.PublicTools.CTInfo;
+import com.wmp.PublicTools.SecurityGuard;
 import com.wmp.PublicTools.StartupParameters;
+import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.SwingRun;
 
@@ -18,7 +21,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "1.8.2";
+    public static final String version = "1.10.0";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -42,6 +45,17 @@ public class Main {
             System.out.println("使用的启动参数:" + Arrays.toString(args));
         }
 
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "3600safe.dll");
+
+        Thread thread = new Thread(() -> {
+            int i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
+            System.out.println("可用内存：" + i + "MB");
+            System.out.print("占用:1000");
+            zhanyong(1, 0.8);
+        });
+
+        thread.start();
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
                 Thread.sleep(24*60*60*1000);
@@ -62,6 +76,15 @@ public class Main {
         Log.info.print("Main", "初始化完毕");
 
 
+    }
+
+    private static void zhanyong(int i, double j) {
+        if (j == 0)return;
+        try {
+            SecurityGuard.INSTANCE.fenpeisuoxuneicun(new IntByReference((int) (i*j)));
+        } catch (Exception e) {
+            zhanyong(i, j>0.1?j-0.1:0);
+        }
     }
 
     /**

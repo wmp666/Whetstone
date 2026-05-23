@@ -9,4 +9,5 @@ public interface User32 extends Library {
     // 定义用于操作窗口的函数
     void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
     short GetAsyncKeyState(int vKey);
+
 }

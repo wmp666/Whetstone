@@ -10,10 +10,13 @@ import com.sun.jna.platform.win32.WinNT;
 public class WinAPIEntireFunction {
 
     public static final byte VK_LWIN = (byte) 0x5B;
+    public static final byte VK_D = (byte) 0x44;
 
-    public static void pressKey(byte keyCode) {
+    public static void pressKey(byte... keyCodes) {
         //模拟按下
-        User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0000, 0);
+        for (byte keyCode: keyCodes) {
+            User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0000, 0);
+        }
 
         // 短暂延迟
         try {
@@ -23,8 +26,12 @@ public class WinAPIEntireFunction {
         }
 
         //模拟松开
-        User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0002, 0);
+        for (byte keyCode : keyCodes) {
+            User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0002, 0);
+        }
     }
+
+
 
     // 光栅操作码
     public static final int DSTINVERT = 0x00550009;  // 反转目标矩形

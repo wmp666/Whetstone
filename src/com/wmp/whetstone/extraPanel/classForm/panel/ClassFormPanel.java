@@ -94,19 +94,16 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                                     happenError();
                                 }*/
 
-                                //全屏遮挡
+                                //显示桌面
                                 if (containsTheClass(finalNowClass, "数学", "班会", "劳动", "晨会")) {
-                                    for (int i = 0; i < 5; i++) {
-                                        EasterEgg.INSTANCE.screenBlocking(5, 1);
-                                    }
+                                    EasterEgg.INSTANCE.showDeskTop();
                                 }
-
-
 
                                 //播放
-                                if (containsTheClass(finalNowClass, "语文", "体育")) {
+                                /*if (containsTheClass(finalNowClass, "语文", "体育")) {
                                     EasterEgg.INSTANCE.videoPlayer();
-                                }
+                                }*/
+
                                 //NJ接管
                                 /*if (containsTheClass(finalNowClass, "语文", "英语", "物理", "生物", "体育")) {
                                     banZhuRenChuMo();
@@ -134,11 +131,11 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                     SimpleDateFormat date = new SimpleDateFormat("yyyy_MM_dd");
                     sb.append(date.format(new Date())).append("\\");
 
-                    SimpleDateFormat time = new SimpleDateFormat("HH_mm");
-                    sb.append(time.format(new Date())).append("_");
+                    SimpleDateFormat time = new SimpleDateFormat("[HH_mm]");
+                    sb.append(time.format(new Date()));
 
-                    sb.append(finalNowClass.className()).
-                            append(".wav");
+                    sb.append("[").append(finalNowClass.className()).append("-").append(nextClassInfo.className()).append("]")
+                            .append(".wav");
 
                     new Thread(()->{
                         {

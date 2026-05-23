@@ -7,10 +7,7 @@ import com.wmp.PublicTools.UITools.CTFontSizeStyle;
 import com.wmp.PublicTools.UITools.GetIcon;
 import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
-import com.wmp.PublicTools.windowsAPI.BlurGlassEffect;
-import com.wmp.PublicTools.windowsAPI.DesktopAppEnumerator;
-import com.wmp.PublicTools.windowsAPI.DisableGlassEffect;
-import com.wmp.PublicTools.windowsAPI.WinAPIEntireFunction;
+import com.wmp.PublicTools.windowsAPI.*;
 import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
 import javax.swing.*;
@@ -101,6 +98,14 @@ public class EasterEgg extends BasicEasterEggFunction{
         Log.info.print(ClassFormPanel.class.toString(), "屏幕遮挡完毕！");
     }
 
+    public void showDeskTop() throws InterruptedException {
+        WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN, WinAPIEntireFunction.VK_D);
+
+        Thread.sleep(800);
+
+        WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN, WinAPIEntireFunction.VK_D);
+    }
+
     public void happenError() throws Exception {
 
         System.out.println(1);
@@ -137,8 +142,6 @@ public class EasterEgg extends BasicEasterEggFunction{
             WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN);
 
             Thread.sleep(500);
-
-            WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN);
 
         }
 
