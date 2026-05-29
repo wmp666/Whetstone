@@ -27,7 +27,7 @@ public class AllFunctionText {
         String name = "test-" + new Random().nextInt();
         System.out.println("线程名称：" + name);
         Thread thread = new Thread(() -> {
-            int i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
+            double i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
             System.out.println("可用内存：" + i + "MB");
             System.out.print("占用:1000");
             SecurityGuard.INSTANCE.fenpeisuoxuneicun(new IntByReference(1000));

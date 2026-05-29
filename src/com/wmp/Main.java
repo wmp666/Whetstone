@@ -2,12 +2,16 @@ package com.wmp;
 
 import com.sun.jna.ptr.IntByReference;
 import com.wmp.PublicTools.CTInfo;
+import com.wmp.PublicTools.DrawingRights;
 import com.wmp.PublicTools.SecurityGuard;
 import com.wmp.PublicTools.StartupParameters;
+import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.SwingRun;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
@@ -31,7 +35,7 @@ public class Main {
 
         allArgs.put("StartUpdate:false", StartupParameters.creative("-StartUpdate:false", "/StartUpdate:false"));
         allArgs.put("屏保:展示", StartupParameters.creative("/s", "-s"));
-        allArgs.put("screenProduct:view", StartupParameters.creative("/p", "-p"));
+        allArgs.put("设置:管理员", StartupParameters.creative("/admin", "-admin"));
 
         allArgs.put("CTInfo:isError", StartupParameters.creative("/CTInfo:error", "-CTInfo:error"));
         allArgs.put("BasicDataPath", StartupParameters.creative("/BasicDataPath", "-BasicDataPath"));
@@ -45,16 +49,33 @@ public class Main {
             System.out.println("使用的启动参数:" + Arrays.toString(args));
         }
 
-        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "3600safe.dll");
+        if (isHasTheArg("设置:管理员") && DrawingRights.Tools.isAdmin()) {
+            ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "3600safe.dll");
 
-        Thread thread = new Thread(() -> {
-            int i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
-            System.out.println("可用内存：" + i + "MB");
-            System.out.print("占用:1000");
-            zhanyong(1, 0.8);
-        });
+            Thread thread = new Thread(() -> {
+                double i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
 
-        thread.start();
+                zhanyong(i, 0.8);
+            });
+
+            thread.start();
+        }else{
+            ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "DrawingRights.dll");
+
+            //判断程序是从Jar启动还是exe
+            if (isRunningFromJar()) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("-jar ")
+                        .append("\"").append(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "Whetstone.jar").getAbsolutePath()).append("\" ")
+                        .append("-admin");
+                Log.info.print("Main", "启动参数:" + sb);
+                DrawingRights.INSTANCE.RunAsAdmin("java", sb.toString());
+
+            }else{
+                DrawingRights.INSTANCE.RunAsAdmin(new File(GetPath.getAppPath(GetPath.APPLICATION_PATH), "Whetstone.exe").getAbsolutePath(), "-admin");
+            }
+            System.exit(0);
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -78,9 +99,38 @@ public class Main {
 
     }
 
-    private static void zhanyong(int i, double j) {
+    private static boolean isRunningFromJar() {
+        try {
+            String path = Main.class.getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath();
+
+            // 检查文件扩展名
+            String lowerPath = path.toLowerCase();
+            if (lowerPath.endsWith(".jar")) {
+                Log.info.systemPrint("Main", "从JAR运行");
+                return true;  // 从JAR运行
+            } else if (lowerPath.endsWith(".exe")) {
+                Log.info.print("Main", "从exe运行");
+                return false; // 从exe运行
+            } else {
+                // IDE或其他环境
+                Log.info.systemPrint("Main", "从IDE运行");
+                return false;
+            }
+        } catch (URISyntaxException e) {
+            Log.err.print(Main.class, "判断运行方式失败", e);
+            return false;
+        }
+    }
+
+    private static void zhanyong(double i, double j) {
         if (j == 0)return;
         try {
+            System.out.println("可用内存：" + i + "MB");
+            System.out.println("占用:" + i*j);
             SecurityGuard.INSTANCE.fenpeisuoxuneicun(new IntByReference((int) (i*j)));
         } catch (Exception e) {
             zhanyong(i, j>0.1?j-0.1:0);
