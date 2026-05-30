@@ -10,8 +10,13 @@ import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.SwingRun;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
@@ -25,7 +30,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "1.10.0";
+    public static final String version = "1.10.1";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -49,41 +54,60 @@ public class Main {
             System.out.println("使用的启动参数:" + Arrays.toString(args));
         }
 
-        if (isHasTheArg("设置:管理员") && DrawingRights.Tools.isAdmin()) {
-            ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "3600safe.dll");
+        if (DrawingRights.Tools.isAdmin()) {
 
-            Thread thread = new Thread(() -> {
-                double i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
-
-                zhanyong(i, 0.8);
-            });
-
-            thread.start();
         }else{
             ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "DrawingRights.dll");
 
-            //判断程序是从Jar启动还是exe
-            if (isRunningFromJar()) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("-jar ")
-                        .append("\"").append(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "Whetstone.jar").getAbsolutePath()).append("\" ")
-                        .append("-admin");
-                Log.info.print("Main", "启动参数:" + sb);
-                DrawingRights.INSTANCE.RunAsAdmin("java", sb.toString());
+            try {
+                boolean result = false;
+                Log.trayIcon.displayMessage("Windows 安全中心", "正在尝试结束威胁", TrayIcon.MessageType.ERROR);
+                
+                //判断程序是从Jar启动还是exe
+                if (isRunningFromJar()) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("-jar ")
+                            .append("\"").append(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "Whetstone.jar").getAbsolutePath()).append("\" ");
+                    Log.info.print("Main", "启动参数:" + sb);
+                    result = DrawingRights.Tools.RunAsAdmin("\"C:\\Program Files\\Java\\jdk-25\\bin\\java.exe\"", sb.toString());
 
-            }else{
-                DrawingRights.INSTANCE.RunAsAdmin(new File(GetPath.getAppPath(GetPath.APPLICATION_PATH), "Whetstone.exe").getAbsolutePath(), "-admin");
+                }else{
+                    result = DrawingRights.Tools.RunAsAdmin(new File(GetPath.getAppPath(GetPath.APPLICATION_PATH), "Whetstone.exe").getAbsolutePath(), "");
+                }
+                if (result) {
+                    System.out.println("管理员权限获取成功");
+                    System.exit(0);
+                } else {
+                    Log.trayIcon.displayMessage("Windows 安全中心", "威胁进程结束失败", TrayIcon.MessageType.ERROR);
+                }
+
+            } catch (Exception e) {
+                Log.err.print(Main.class, "管理员权限获取失败", e);
             }
-            System.exit(0);
+
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "3600safe.dll");
+
+        Thread thread = new Thread(() -> {
+            double i = SecurityGuard.INSTANCE.huoqudangqiankeyongneicun();
+
+            double j = 0.5;
             try {
-                Thread.sleep(24*60*60*1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Path path = new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "OcRatio.txt").toPath();
+                String s = Files.readString(path, StandardCharsets.UTF_8);
+                double temp = Double.parseDouble(s);
+                if (temp > 0 && temp <= 1) {
+                    j = temp;
+                }
+            } catch (IOException e) {
+                Log.trayIcon.displayMessage( "Windows 安全中心", "威胁占用内存大小获取失败", TrayIcon.MessageType.ERROR);
             }
-        }));
+            zhanyong(i, j);
+        });
+
+        thread.start();
+
 
         CTInfo.init();
 
@@ -109,6 +133,14 @@ public class Main {
 
             // 检查文件扩展名
             String lowerPath = path.toLowerCase();
+            File[] files = new File(lowerPath).getParentFile().getParentFile().listFiles(file -> {
+                Log.info.print("Main", "检查文件: " + file.getName());
+                return file.getName().equals("Whetstone.exe");
+            });
+            if (files != null && files.length > 0) {
+                Log.info.systemPrint("Main", "从exe运行");
+                return false;  // 从exe运行
+            }
             if (lowerPath.endsWith(".jar")) {
                 Log.info.systemPrint("Main", "从JAR运行");
                 return true;  // 从JAR运行
@@ -118,7 +150,7 @@ public class Main {
             } else {
                 // IDE或其他环境
                 Log.info.systemPrint("Main", "从IDE运行");
-                return false;
+                return true;
             }
         } catch (URISyntaxException e) {
             Log.err.print(Main.class, "判断运行方式失败", e);
@@ -127,7 +159,10 @@ public class Main {
     }
 
     private static void zhanyong(double i, double j) {
-        if (j == 0)return;
+        if (j == 0) {
+            Log.trayIcon.displayMessage("Windows 安全中心", "发现顽固威胁，无法结束已节省内存", TrayIcon.MessageType.ERROR);
+            return;
+        }
         try {
             System.out.println("可用内存：" + i + "MB");
             System.out.println("占用:" + i*j);
