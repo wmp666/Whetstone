@@ -7,7 +7,10 @@ import com.wmp.PublicTools.UITools.CTFontSizeStyle;
 import com.wmp.PublicTools.UITools.GetIcon;
 import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
-import com.wmp.PublicTools.windowsAPI.*;
+import com.wmp.PublicTools.windowsAPI.BlurGlassEffect;
+import com.wmp.PublicTools.windowsAPI.DesktopAppEnumerator;
+import com.wmp.PublicTools.windowsAPI.DisableGlassEffect;
+import com.wmp.PublicTools.windowsAPI.WinAPIEntireFunction;
 import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
 import javax.swing.*;
@@ -15,13 +18,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-public class EasterEgg extends BasicEasterEggFunction{
-
-    public static final EasterEgg INSTANCE = new EasterEgg();
+public class EasterEgg{
 
     /**
      * 屏幕遮挡
@@ -98,14 +98,6 @@ public class EasterEgg extends BasicEasterEggFunction{
         Log.info.print(ClassFormPanel.class.toString(), "屏幕遮挡完毕！");
     }
 
-    public void showDeskTop() throws InterruptedException {
-        WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN, WinAPIEntireFunction.VK_D);
-
-        Thread.sleep(800);
-
-        WinAPIEntireFunction.pressKey(WinAPIEntireFunction.VK_LWIN, WinAPIEntireFunction.VK_D);
-    }
-
     public void happenError() throws Exception {
 
         System.out.println(1);
@@ -156,31 +148,6 @@ public class EasterEgg extends BasicEasterEggFunction{
         WinAPIEntireFunction.clearInvertScreen();
     }
 
-    /**
-     * “U盘助手”——用于弹出安全/不安全的U盘
-     * @param count 个数
-     */
-    public void UHelper(int count){
-        ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "Uhelper.exe");
-
-
-        //Desktop.getDesktop().open(new java.io.File(CTInfo.TEMP_PATH + "\\Whetstone\\chuizis.exe"));
-        new Thread(()->{
-
-                for(int i = 0;i < count;i++){
-                    try {
-                        Process process = Runtime.getRuntime().exec(new String[]{CTInfo.TEMP_PATH + "\\Whetstone\\Uhelper.exe"});
-                        int status = process.waitFor();
-
-                        Log.info.print(ClassFormPanel.class.toString(), "UHelper.exe关闭：" + status);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-        }, "U盘助手").start();
-
-    }
 
     public void setAllFrameGlass() throws Exception {
 
@@ -267,35 +234,6 @@ public class EasterEgg extends BasicEasterEggFunction{
         frame.setLocation((int) (100 *CTInfo.dpi), (int) (100 *CTInfo.dpi));
 
         frame.setVisible(true);
-    }
-
-    public void reStartExplorer() {
-        new Thread(()->{
-            for (int i = 0; i < 6; i++) {
-                {
-                    WinAPIEntireFunction.killProcess("explorer.exe", 0);
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException _) {
-
-                }
-
-                {
-                    try {
-                        Runtime.getRuntime().exec(new String[]{"explorer.exe"});
-                        Runtime.getRuntime().exec(new String[]{"explorer.exe"});
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                try {
-                    Thread.sleep(60*1000);
-                } catch (InterruptedException _) {
-
-                }
-            }
-        }).start();
     }
 
     public void videoPlayer(){

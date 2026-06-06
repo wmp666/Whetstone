@@ -1,9 +1,9 @@
 package com.wmp.whetstone.extraPanel.classForm.panel;
 
+
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
-import com.wmp.PublicTools.easteregg.EasterEgg;
-import com.wmp.PublicTools.easteregg.EasterEggClear;
+import com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit;
 import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.recording.main.Recording;
@@ -17,8 +17,8 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
@@ -26,14 +26,12 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
     private String oldNowClassName = "无";
     private String oldNextClassName = "无";
 
-    private static AtomicReference<Recording.Info> recordingInfo = new AtomicReference<>();
+    private static final AtomicReference<Recording.Info> recordingInfo = new AtomicReference<>();
 
 
     public ClassFormPanel() {
-        this.setLayout(new GridBagLayout());
         this.setName("课程表");
         this.setID("ClassFormPanel");
-        this.setOpaque(false);
 
         this.setIgnoreState(true);
         this.setIndependentRefresh(true, 1000);
@@ -47,8 +45,6 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
     @Override
     protected void easyRefresh() {
         synchronized (this) {
-            this.removeAll();
-
 
             //课程数据
             ClassFormInfo nowClass = ((CFInfoControl) getInfoControl()).getNowClass();
@@ -68,51 +64,32 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                     ClassFormInfo finalNowClass = nowClass;
 
                     if (nowClass.className().equals("无")){
-                        //清理彩蛋
-                        EasterEggClear.INSTANCE.UHelper(0);
-
-
-
+                        CTInfo.easterEggUnits.forEach(BasicEasterEggUnit::clear);
                     }else{
+                        new Thread(()->{
+                        try {
+                            CTInfo.EEMap.get("class_start")
+                                    .forEach(easterEggUnit -> {
+                                        Log.info.print(ClassFormPanel.class.toString(),
+                                                String.format("启动彩蛋：%s|版本：%s|开发库版本：%s", easterEggUnit.easterEggUnit().getID(), easterEggUnit.easterEggUnit().getVersion(), easterEggUnit.easterEggUnit().getTargetVersion()));
+                                        easterEggUnit.easterEggUnit().run(easterEggUnit.args());
+                                    });
+                        } catch (Exception _) {
+                            Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
+                        }
+                        }, "课程开始执行").start();
+
+
 
                         new Thread(()->{
                             try {
-                                //U盘助手
-                                if (containsTheClass(finalNowClass, "数学", "化学", "班会", "劳动", "晨会")){
-                                    EasterEgg.INSTANCE.UHelper(2);
-                                }
+                                CTInfo.EEMap.get(finalNowClass.className())
+                                        .forEach(easterEggUnit -> {
+                                            Log.info.print(ClassFormPanel.class.toString(),
+                                                    String.format("启动彩蛋：%s|版本：%s|开发库版本：%s", easterEggUnit.easterEggUnit().getID(), easterEggUnit.easterEggUnit().getVersion(), easterEggUnit.easterEggUnit().getTargetVersion()));
+                                            easterEggUnit.easterEggUnit().run(easterEggUnit.args());
+                                        });
 
-                                //重启Explorer
-                                {
-                                    if (containsTheClass(finalNowClass, "晨会", "化学")) {
-                                        EasterEgg.INSTANCE.reStartExplorer();
-                                    }
-                                }
-
-                                //锤子
-                                /*if (containsTheClass(finalNowClass, "体育")) {
-                                    happenError();
-                                }*/
-
-                                //显示桌面
-                                if (containsTheClass(finalNowClass, "数学", "班会", "劳动", "晨会")) {
-                                    EasterEgg.INSTANCE.showDeskTop();
-                                }
-
-                                //播放
-                                /*if (containsTheClass(finalNowClass, "语文", "体育")) {
-                                    EasterEgg.INSTANCE.videoPlayer();
-                                }*/
-
-                                //NJ接管
-                                /*if (containsTheClass(finalNowClass, "语文", "英语", "物理", "生物", "体育")) {
-                                    banZhuRenChuMo();
-                                }*/
-
-                                //窗口透明
-                                /*if (containsTheClass(finalNowClass, "英语", "物理", "化学", "体育")) {
-                                    setAllFrameGlass();
-                                }*/
                             } catch (Exception _) {
                                 Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
                             }
@@ -121,47 +98,102 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
                     }
 
-                    if (recordingInfo.get() != null){
-                        Recording.stop(recordingInfo.get());
-                    }
+                    //录音
+                    {
+                        if (recordingInfo.get() != null) {
+                            Recording.stop(recordingInfo.get());
+                        }
 
-                    //生成路径+名字
-                    StringBuffer sb = new StringBuffer("Whetstone\\recording\\");
+                        //生成路径+名字
+                        StringBuffer sb = new StringBuffer("Whetstone\\Recording\\");
 
-                    SimpleDateFormat date = new SimpleDateFormat("yyyy_MM_dd");
-                    sb.append(date.format(new Date())).append("\\");
+                        SimpleDateFormat date = new SimpleDateFormat("yyyy_MM_dd");
+                        sb.append(date.format(new Date())).append("\\");
 
-                    SimpleDateFormat time = new SimpleDateFormat("[HH_mm]");
-                    sb.append(time.format(new Date()));
+                        SimpleDateFormat time = new SimpleDateFormat("[HH_mm]");
+                        sb.append(time.format(new Date()));
 
-                    sb.append("[").append(finalNowClass.className()).append("-").append(nextClassInfo.className()).append("]")
-                            .append(".wav");
+                        sb.append("[").append(finalNowClass.className()).append("-").append(nextClassInfo.className()).append("]")
+                                .append(".wav");
+                        //删除多余的文件夹（若文件夹超过5个）
+                        File recording = new File(CTInfo.TEMP_PATH, "Whetstone\\Recording\\");
+                        if (recording.exists() && recording.isDirectory()) {
+                            File[] files = recording.listFiles(file -> {
+                                String directory_format = "^\\d{4}_\\d{2}_\\d{2}$";
+                                String name = file.getName();
+                                boolean matches = name.matches(directory_format);
+                                Log.info.print(ClassFormPanel.class.toString(), "匹配文件夹：" + name + "->" + matches);
+                                return matches;
+                            });
+                            if (files != null && files.length > 5) {
+                                Log.info.print(ClassFormPanel.class.toString(), "符合的文件夹列表：" + Arrays.toString(files));
+                                HashMap<Date, File> map = new HashMap<>();
+                                for (File file : files) {
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+                                    map.put(dateFormat.parse(file.getName()), file);
+                                }
 
-                    new Thread(()->{
-                        {
-                            JSONObject jsonObject = new JSONObject();
-                            try {
-                                jsonObject = new JSONObject(
-                                        IOForInfo.getInfos(new File(CTInfo.DATA_PATH, "Whetstone\\recording.json").toURI().toURL()));
-                            } catch (Exception _) {
-                            }
+                                // 将map的keySet转换为List并排序
+                                List<Date> sortedDates = new ArrayList<>(map.keySet());
+                                sortedDates.sort(Collections.reverseOrder()); // 降序排序，最新的在前
 
-                            if (jsonObject.has("mixerInfo")) {
-                                JSONObject finalJsonObject = jsonObject;
-                                GetRecordingInfo.enumerateInputDevices().forEach(info ->{
-                                    if (info.getName().equals(finalJsonObject.getString("mixerInfo"))){
-                                        Recording.Info tempInfo = Recording.create(info);
-                                        recordingInfo.set(tempInfo);
+                                // 获取最大的5个日期（最近的5个）
+                                List<Date> top5Dates = sortedDates.subList(0, 5);
+
+                                // 反选出其余的日期
+                                List<Date> remainingDates = sortedDates.subList(5, sortedDates.size());
+
+                                // 如果需要获取对应的文件
+                                List<File> top5Files = top5Dates.stream()
+                                        .map(map::get)
+                                        .toList();
+
+                                List<File> remainingFiles = remainingDates.stream()
+                                        .map(map::get)
+                                        .toList();
+
+                                Log.info.print(ClassFormPanel.class.toString(), "最近的5个文件夹：" + top5Files);
+                                Log.info.print(ClassFormPanel.class.toString(), "其余的文件夹：" + remainingFiles);
+
+                                for (File file : remainingFiles) {
+                                    if (file.exists() && file.isDirectory()) {
+                                        deleteDirectory(file);
+                                        Log.info.print(ClassFormPanel.class.toString(), "已删除旧文件夹: " + file.getAbsolutePath());
                                     }
-                                });
+                                }
+
                             }
                         }
 
-                        Recording.recording(
-                                new File(CTInfo.TEMP_PATH, sb.toString()),
-                                recordingInfo.get());
 
-                    }, "录音线程" + sb).start();
+                        new Thread(() -> {
+                            {
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    jsonObject = new JSONObject(
+                                            IOForInfo.getInfos(new File(CTInfo.DATA_PATH, "Whetstone\\recording.json").toURI().toURL()));
+                                } catch (Exception _) {
+                                }
+
+                                if (jsonObject.has("mixerInfo")) {
+                                    JSONObject finalJsonObject = jsonObject;
+                                    GetRecordingInfo.enumerateInputDevices().forEach(info -> {
+                                        if (info.getName().equals(finalJsonObject.getString("mixerInfo"))) {
+                                            Recording.Info tempInfo = Recording.create(info);
+                                            recordingInfo.set(tempInfo);
+                                        }
+                                    });
+                                }
+                            }
+
+                            Recording.recording(
+                                    new File(CTInfo.TEMP_PATH, sb.toString()),
+                                    recordingInfo.get());
+
+                        }, "录音线程" + sb).start();
+                    }
+
+
 
                 }
 
@@ -180,6 +212,21 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
         }
     }
 
+    /**
+     * 递归删除目录及其所有内容
+     * @param directory 要删除的目录
+     */
+    private static void deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        directory.delete();
+    }
 
 
     /**

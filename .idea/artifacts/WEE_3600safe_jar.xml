@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="WEE_3600safe:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEE_3600safe_jar</output-path>
+    <root id="root">
+      <element id="archive" name="WEE_3600safe.jar">
+        <element id="module-output" name="WEE_3600safe" />
+      </element>
+    </root>
+  </artifact>
+</component>

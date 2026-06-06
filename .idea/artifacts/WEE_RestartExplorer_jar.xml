@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="WEE_RestartExplorer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEE_RestartExplorer_jar</output-path>
+    <root id="root">
+      <element id="archive" name="WEE_RestartExplorer.jar">
+        <element id="module-output" name="WEE_RestartExplorer" />
+      </element>
+    </root>
+  </artifact>
+</component>
