@@ -15,88 +15,14 @@ import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Random;
 
 public class EasterEgg{
 
-    /**
-     * 屏幕遮挡
-     * @param maxWaitTime 启动前的等待时间(min)
-     * @param showTime 遮挡时间(s)
-     * @throws Exception
-     */
-    public void screenBlocking(int maxWaitTime, int showTime) throws Exception {
-        //获取屏幕分辨率
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-
-
-        int waitTime = (new Random().nextInt(maxWaitTime) + 1);
-        Log.info.print(ClassFormPanel.class.toString(), String.format("预启动：屏幕遮挡|参数：启动前等待时间:%smin;显示时间:%ss;大小：%s", waitTime, showTime, d));
-
-        Thread.sleep((long) waitTime * 60 * 1000);
-
-        //创建一个robot对象
-        Robot robot = new Robot();
-
-        //创建该分辨率的矩形对象
-        Rectangle screenRect = new Rectangle(d);
-        //根据这个矩形截图
-        BufferedImage bufferedImage = robot.createScreenCapture(screenRect);
-
-        JDialog dialog = new JDialog();
-        dialog.setUndecorated(true);
-        dialog.setAlwaysOnTop(true);
-
-        final boolean[] b = {false};
-        Object temp = 0;
-        Runnable r = () -> {
-            synchronized (temp){
-                if (b[0]) return;
-                b[0] = true;
-                try {
-                    Thread.sleep(showTime * 1000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                dialog.setVisible(false);
-            }
-        };
-
-        JLabel image = new JLabel(new ImageIcon(bufferedImage));
-        image.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-
-                r.run();
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                r.run();
-            }
-
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                r.run();
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                r.run();
-            }
-        });
-        dialog.add(image);
-
-        dialog.pack();
-
-        dialog.setVisible(true);
-        Log.info.print(ClassFormPanel.class.toString(), "屏幕遮挡完毕！");
-    }
 
     public void happenError() throws Exception {
 

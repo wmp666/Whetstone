@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="WEE_ScreenBlocking:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEE_ScreenBlocking_jar</output-path>
+    <root id="root">
+      <element id="archive" name="WEE_ScreenBlocking.jar">
+        <element id="module-output" name="WEE_ScreenBlocking" />
+      </element>
+    </root>
+  </artifact>
+</component>
