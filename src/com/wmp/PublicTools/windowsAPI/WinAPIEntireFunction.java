@@ -6,6 +6,7 @@ import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
+import com.wmp.PublicTools.windowsAPI.User32;
 
 public class WinAPIEntireFunction {
 
@@ -29,42 +30,6 @@ public class WinAPIEntireFunction {
         for (byte keyCode : keyCodes) {
             User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0002, 0);
         }
-    }
-
-
-
-    // 光栅操作码
-    public static final int DSTINVERT = 0x00550009;  // 反转目标矩形
-
-    public static void invertScreenWithJNA() throws InterruptedException {
-        // 获取桌面窗口句柄
-        WinDef.HWND desktop = com.sun.jna.platform.win32.User32.INSTANCE.GetDesktopWindow();
-
-        // 获取屏幕设备上下文
-        WinDef.HDC hdc = com.sun.jna.platform.win32.User32.INSTANCE.GetDC(desktop);
-
-        // 获取屏幕尺寸
-        int width = com.sun.jna.platform.win32.User32.INSTANCE.GetSystemMetrics(
-                com.sun.jna.platform.win32.User32.SM_CXSCREEN);
-        int height = com.sun.jna.platform.win32.User32.INSTANCE.GetSystemMetrics(
-                com.sun.jna.platform.win32.User32.SM_CYSCREEN);
-
-        // 使用PatBlt反转整个屏幕
-        GDI32.INSTANCE.PatBlt(hdc, 0, 0, width, height, DSTINVERT);
-
-        Thread.sleep(3000);
-    }
-
-    public static void clearInvertScreen() {
-        // 获取桌面窗口句柄
-        WinDef.HWND desktop = com.sun.jna.platform.win32.User32.INSTANCE.GetDesktopWindow();
-
-        // 获取屏幕设备上下文
-        WinDef.HDC hdc = com.sun.jna.platform.win32.User32.INSTANCE.GetDC(desktop);
-
-
-        // 清理资源
-        com.sun.jna.platform.win32.User32.INSTANCE.ReleaseDC(desktop, hdc);
     }
 
     // 定义访问权限 (PROCESS_TERMINATE = 0x0001)
