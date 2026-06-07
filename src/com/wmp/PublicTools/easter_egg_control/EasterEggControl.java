@@ -1,5 +1,7 @@
 package com.wmp.PublicTools.easter_egg_control;
 
+import com.sun.jna.Function;
+import com.sun.jna.NativeLibrary;
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.printLog.Log;
@@ -15,26 +17,32 @@ import java.util.Map;
 import java.util.Objects;
 
 public class EasterEggControl {
+    /**
+     * 用于安装Jar和DLL
+     * @param ignoringCompatibility 是否无视兼容性（针对Jar）
+     * @return 彩蛋列表
+     */
     public static List<BasicEasterEggUnit> installAll(boolean ignoringCompatibility){
         List<BasicEasterEggUnit> EEUnitList = new ArrayList<>();
         String appPath = GetPath.getAppPath(GetPath.SOURCE_FILE_PATH);
         File EEFile = new File(appPath, "easter_egg");
         File[] files = getEasterEggFiles(EEFile);
-        if (files != null) {
-            for (File file : files) {
-                Log.info.print(EasterEggControl.class.toString(), "正在安装[" + file.getName() + "]");
+        for (File file : files) {
+            Log.info.print(EasterEggControl.class.toString(), "正在安装[" + file.getName() + "]");
+            if (file.getName().endsWith(".jar")) {
+                //安装Jar类型的彩蛋
                 try {
                     URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
                     Class<?> EEUnit_class = urlClassLoader.loadClass("com.wmp.whetstone.EasterEggUnit");
                     Object temp = EEUnit_class.getDeclaredConstructor().newInstance();
 
-                    if (ignoringCompatibility || isCompatible((String)EEUnit_class.getDeclaredMethod("getTargetVersion").invoke(temp), CTInfo.DEVELOP_VERSION)) {
-                        BasicEasterEggUnit EEUnit = new BasicEasterEggUnit(){
+                    if (ignoringCompatibility || isCompatible((String) EEUnit_class.getDeclaredMethod("getTargetVersion").invoke(temp), CTInfo.DEVELOP_VERSION)) {
+                        BasicEasterEggUnit EEUnit = new BasicEasterEggUnit() {
 
                             @Override
                             public String getID() {
                                 try {
-                                    return (String)EEUnit_class.getDeclaredMethod("getID").invoke(temp);
+                                    return (String) EEUnit_class.getDeclaredMethod("getID").invoke(temp);
                                 } catch (Exception e) {
                                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getID]方法失败", e);
                                     return null;
@@ -44,7 +52,7 @@ public class EasterEggControl {
                             @Override
                             public String getVersion() {
                                 try {
-                                    return (String)EEUnit_class.getDeclaredMethod("getVersion").invoke(temp);
+                                    return (String) EEUnit_class.getDeclaredMethod("getVersion").invoke(temp);
                                 } catch (Exception e) {
                                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getVersion]方法失败", e);
                                     return null;
@@ -54,7 +62,7 @@ public class EasterEggControl {
                             @Override
                             public String getTargetVersion() {
                                 try {
-                                    return (String)EEUnit_class.getDeclaredMethod("getTargetVersion").invoke(temp);
+                                    return (String) EEUnit_class.getDeclaredMethod("getTargetVersion").invoke(temp);
                                 } catch (Exception e) {
                                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getTargetVersion]方法失败", e);
                                     return null;
@@ -64,7 +72,7 @@ public class EasterEggControl {
                             @Override
                             public String help() {
                                 try {
-                                    return (String)EEUnit_class.getDeclaredMethod("help").invoke(temp);
+                                    return (String) EEUnit_class.getDeclaredMethod("help").invoke(temp);
                                 } catch (Exception e) {
                                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[help]方法失败", e);
                                     return null;
@@ -95,6 +103,13 @@ public class EasterEggControl {
                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]失败", e);
                 }
             }
+            else if (file.getName().endsWith(".dll")){
+                //加载DLL
+                NativeLibrary library = NativeLibrary.getInstance(file.getAbsolutePath());
+
+                BasicEasterEggUnit easterEggUnit = new DLLEasterEggUnit(library);
+                EEUnitList.add(easterEggUnit);
+            }
         }
         return EEUnitList;
     }
@@ -102,7 +117,7 @@ public class EasterEggControl {
     public static File[] getEasterEggFiles(File path){
         ArrayList< File> arrayList = new ArrayList<>();
         List.of(Objects.requireNonNull(path.listFiles())).forEach(file -> {
-            if (file.isFile() && file.getName().endsWith(".jar")) {
+            if (file.isFile() && (file.getName().endsWith(".jar") || file.getName().endsWith(".dll"))) {
                 arrayList.add(file);
             } else if (file.isDirectory()) {
                 arrayList.addAll(List.of(getEasterEggFiles(file)));
@@ -133,6 +148,21 @@ public class EasterEggControl {
             if (var != null) {
                 return getLoadedEasterEggUnit(var, varMap, easterEggUnits);
             }
+        } else if (id.startsWith("dll:")){
+            //将数据转换为String[]
+            ArrayList<String> list = new ArrayList<>();
+            list.add(jsonObject.getString("funcName"));
+            list.addAll(jsonObject.getJSONArray("args").toList().stream()
+                    .map(Object::toString)
+                    .toList());
+
+            // 查找对应的 BasicEasterEggUnit
+            BasicEasterEggUnit unit = easterEggUnits.stream()
+                    .filter(u -> u.getID().equals(id.substring(4)))
+                    .findFirst()
+                    .orElse(null);
+
+            return new LoadedEasterEggUnit(unit, list.toArray(new String[0]));
         }else{
             //将数据转换为String[]
             String[] args = jsonObject.getJSONArray("args").toList().stream()

@@ -4,6 +4,7 @@ package com.wmp.whetstone.extraPanel.classForm.panel;
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
 import com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit;
+import com.wmp.PublicTools.easter_egg_control.EasterEggRun;
 import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.recording.main.Recording;
@@ -66,35 +67,9 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                     if (nowClass.className().equals("无")){
                         CTInfo.easterEggUnits.forEach(BasicEasterEggUnit::clear);
                     }else{
-                        new Thread(()->{
-                        try {
-                            CTInfo.EEMap.get("class_start")
-                                    .forEach(easterEggUnit -> {
-                                        Log.info.print(ClassFormPanel.class.toString(),
-                                                String.format("启动彩蛋：%s|版本：%s|开发库版本：%s", easterEggUnit.easterEggUnit().getID(), easterEggUnit.easterEggUnit().getVersion(), easterEggUnit.easterEggUnit().getTargetVersion()));
-                                        easterEggUnit.easterEggUnit().run(easterEggUnit.args());
-                                    });
-                        } catch (Exception _) {
-                            Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
-                        }
-                        }, "课程开始执行").start();
+                        EasterEggRun.run("class_start", "课程开始执行");
 
-
-
-                        new Thread(()->{
-                            try {
-                                CTInfo.EEMap.get(finalNowClass.className())
-                                        .forEach(easterEggUnit -> {
-                                            Log.info.print(ClassFormPanel.class.toString(),
-                                                    String.format("启动彩蛋：%s|版本：%s|开发库版本：%s", easterEggUnit.easterEggUnit().getID(), easterEggUnit.easterEggUnit().getVersion(), easterEggUnit.easterEggUnit().getTargetVersion()));
-                                            easterEggUnit.easterEggUnit().run(easterEggUnit.args());
-                                        });
-
-                            } catch (Exception _) {
-                                Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
-                            }
-                        }, "彩蛋启动!").start();
-
+                        EasterEggRun.run(finalNowClass.className(),  finalNowClass.className()+ "彩蛋");
 
                     }
 

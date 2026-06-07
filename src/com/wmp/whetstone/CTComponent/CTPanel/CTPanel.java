@@ -1,13 +1,28 @@
 package com.wmp.whetstone.CTComponent.CTPanel;
 
-import javax.swing.*;
-
-public abstract class CTPanel extends JPanel {
+public abstract class CTPanel{
+    private String name = "CTPanel";
     private String ID = "CTPanel";
+    private boolean visible = true;
 
     public CTPanel() {
         super();
-        this.setOpaque(false);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public String getID() {

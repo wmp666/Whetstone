@@ -5,14 +5,13 @@ import com.wmp.PublicTools.DrawingRights;
 import com.wmp.PublicTools.StartupParameters;
 import com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit;
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
+import com.wmp.PublicTools.easter_egg_control.EasterEggRun;
 import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.io.ResourceLocalizer;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.CTComponent.CTOptionPane;
 import com.wmp.whetstone.SwingRun;
-import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.net.URISyntaxException;
@@ -30,7 +29,16 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "2.0.2";
+    public static final String version = "2.1.1";
+    /**
+     * 最多三位，用于判断开发Jar文件所需文件的更新情况<br>
+     * 例如:
+     * <ul>
+     *      <li>com.wmp.PublicTools.windowsAPI.*
+     *      <li>com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit
+     *      <li>...
+     * </ul>
+     */
     public static final String developVersion = "2.0.0";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
@@ -67,7 +75,9 @@ public class Main {
                     1. 导入：拖入“app/easter_egg”文件夹（Jar文件）
                     2. 链接：在“app/start_list.json”中设置启动方式
                          ① 彩蛋单元：{"id": "...", "args": ["...", ...]}
-                         可转换：{"id": "var:var_list.json中对应名", "args": ["...", ...]}
+                         如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "args": ["style:value", ...]}
+                         支持的类型：byte, char, string, WString, int, double, long
+                         可转换：{"id": "var:var_list.json中对应名"}
                     
                          ② 变量列表：在“app/var_list.json”，用于化简启动方式设置时所输入的彩蛋单元内容
                          格式：{"变量名": {彩蛋单元}}, ...}
@@ -142,19 +152,7 @@ public class Main {
 
         CTInfo.init();
 
-        new Thread(()->{
-            try {
-                CTInfo.EEMap.get("app_start")
-                        .forEach(easterEggUnit -> {
-                            Log.info.print(ClassFormPanel.class.toString(),
-                                    String.format("启动彩蛋：%s|版本：%s|开发库版本：%s", easterEggUnit.easterEggUnit().getID(), easterEggUnit.easterEggUnit().getVersion(), easterEggUnit.easterEggUnit().getTargetVersion()));
-                            easterEggUnit.easterEggUnit().run(easterEggUnit.args());
-                        });
-
-            } catch (Exception _) {
-                Log.trayIcon.displayMessage("噢,天呐!", "搞砸了呢...", TrayIcon.MessageType.ERROR);
-            }
-        }, "应用启动执行").start();
+        EasterEggRun.run("app_start", "应用启动执行");
 
         try {
             SwingRun.show();

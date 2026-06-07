@@ -6,7 +6,6 @@ import com.wmp.whetstone.CTComponent.CTPanel.CTViewPanel;
 import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainWindow {
@@ -14,7 +13,7 @@ public class MainWindow {
     public static final ArrayList<CTViewPanel> allPanelList = new ArrayList<>();
 
 
-    public MainWindow(String path) throws IOException {
+    public MainWindow(String path){
 
         //添加组件
 
