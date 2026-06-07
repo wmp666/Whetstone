@@ -29,7 +29,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "2.1.1";
+    public static final String version = "2.1.2";
     /**
      * 最多三位，用于判断开发Jar文件所需文件的更新情况<br>
      * 例如:
@@ -75,7 +75,11 @@ public class Main {
                     1. 导入：拖入“app/easter_egg”文件夹（Jar文件）
                     2. 链接：在“app/start_list.json”中设置启动方式
                          ① 彩蛋单元：{"id": "...", "args": ["...", ...]}
-                         如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "args": ["style:value", ...]}
+                         如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "func": "要使用功能", "args": ["style:value", ...]}
+                         支持的功能：while->死循环 for:[count]->循环[count]次
+                                    sleep:before:[time]->在启动前休眠[time]毫秒
+                                    sleep:after:[time]->在启动后休眠[time]毫秒
+                                    sleep:while:[time]->在循环时的间隔休眠[time]毫秒（存在循环时可用）
                          支持的类型：byte, char, string, WString, int, double, long
                          可转换：{"id": "var:var_list.json中对应名"}
                     

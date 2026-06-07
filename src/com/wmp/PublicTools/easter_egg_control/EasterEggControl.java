@@ -1,6 +1,5 @@
 package com.wmp.PublicTools.easter_egg_control;
 
-import com.sun.jna.Function;
 import com.sun.jna.NativeLibrary;
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.io.GetPath;
@@ -152,6 +151,7 @@ public class EasterEggControl {
             //将数据转换为String[]
             ArrayList<String> list = new ArrayList<>();
             list.add(jsonObject.getString("funcName"));
+            list.add(jsonObject.getString("func"));
             list.addAll(jsonObject.getJSONArray("args").toList().stream()
                     .map(Object::toString)
                     .toList());

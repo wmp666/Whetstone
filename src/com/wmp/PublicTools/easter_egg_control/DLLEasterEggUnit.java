@@ -6,6 +6,9 @@ import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DLLEasterEggUnit extends BasicEasterEggUnit {
 
@@ -17,8 +20,8 @@ public class DLLEasterEggUnit extends BasicEasterEggUnit {
 
     /**
      * 调用DLL中的方法
-     *
-     * @param args 方法的参数 内容[方法名, 传入参数...]
+     * 功能：已";"分割
+     * @param args 方法的参数 内容[方法名, 功能, 传入参数...]
      */
     public void run(String[] args) {
         Log.info.print(DLLEasterEggUnit.class.toString(), "正在调用DLL中的方法...");
@@ -26,11 +29,68 @@ public class DLLEasterEggUnit extends BasicEasterEggUnit {
         Function function = dll.getFunction(args[0]);
         ArrayList<Object> inArgs = new ArrayList<>();
         //将传入的参数转换为对应类型
-        for (int i = 1; i < args.length; i++) {
+        for (int i = 2; i < args.length; i++) {
             inArgs.add(DLLVar.StringToVar(args[i]).toTargetStyle());
         }
-        Log.info.print(DLLEasterEggUnit.class.toString(), String.format("正在调用DLL中的方法：%s|参数：%s", args[0], inArgs));
-        function.invokeVoid(inArgs.toArray());
+        List<String> funcList = getFuncList(args[1]);
+        Log.info.print(DLLEasterEggUnit.class.toString(), String.format("正在调用DLL中的方法：%s|功能：%s|参数：%s", args[0], funcList, inArgs));
+
+        AtomicLong sleep_before = new AtomicLong();
+        AtomicLong sleep_while = new AtomicLong();
+        AtomicLong sleep_after = new AtomicLong();
+
+        funcList.forEach(func -> {
+            if (func.startsWith("sleep:before:")) {
+                sleep_before.set(Long.parseLong(func.split(":")[2]));
+            } else if (func.startsWith("sleep:while:")) {
+                sleep_while.set(Long.parseLong(func.split(":")[2]));
+            } else if (func.startsWith("sleep:after:")) {
+                sleep_after.set(Long.parseLong(func.split(":")[2]));
+            }
+        });
+
+        try {
+            Thread.sleep(sleep_before.get());
+
+            if (funcList.contains("while")){
+                while (true){
+                    function.invokeVoid(inArgs.toArray());
+                    Thread.sleep(sleep_while.get());
+                }
+            }else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))){
+                int count = Integer.parseInt(funcList.stream().filter(func -> func.startsWith("for:")).findFirst().get().split(":")[1]);
+                for (int i = 0; i < count; i++) {
+                    function.invokeVoid(inArgs.toArray());
+                    Thread.sleep(sleep_while.get());
+                }
+            } else {
+                function.invokeVoid(inArgs.toArray());
+            }
+
+
+            Thread.sleep(sleep_after.get());
+        } catch (Exception e) {
+            Log.err.print(DLLEasterEggUnit.class, "调用DLL中的方法失败", e);
+        }
+    }
+
+    /**
+     * 获取功能列表
+     * @param func 功能
+     *             <ul>
+     *             <li>while 循环</li>
+     *             <li>for:[count] 循环[count]次</li>
+     *             <li>sleep:before:[time] 在启动前休眠[time]毫秒</li>
+     *             <li>sleep:after:[time] 在启动后休眠[time]毫秒</li>
+     *             <li>sleep:while:[time] 在循环时的间隔休眠[time]毫秒（存在循环时可用）</li>
+     *             </ul>
+     * @return 功能列表
+     */
+    private List<String> getFuncList(String func){
+        String[] split = func.split(";");
+        List< String> list = new ArrayList<>();
+        Collections.addAll(list, split);
+        return list;
     }
 
 
