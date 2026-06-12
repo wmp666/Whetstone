@@ -3,7 +3,6 @@ package com.wmp.whetstone.extraPanel.classForm.panel;
 
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
-import com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit;
 import com.wmp.PublicTools.easter_egg_control.EasterEggRun;
 import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
@@ -15,11 +14,9 @@ import com.wmp.whetstone.extraPanel.classForm.ClassFormInfo;
 import com.wmp.whetstone.extraPanel.classForm.ClassFormInfos;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
@@ -65,7 +62,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                     ClassFormInfo finalNowClass = nowClass;
 
                     if (nowClass.className().equals("无")){
-                        CTInfo.easterEggUnits.forEach(BasicEasterEggUnit::clear);
+                        EasterEggRun.clear(oldNowClassName);
                     }else{
                         EasterEggRun.run("class_start", "课程开始执行");
 
@@ -100,43 +97,46 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                                 Log.info.print(ClassFormPanel.class.toString(), "匹配文件夹：" + name + "->" + matches);
                                 return matches;
                             });
-                            if (files != null && files.length > 5) {
-                                Log.info.print(ClassFormPanel.class.toString(), "符合的文件夹列表：" + Arrays.toString(files));
-                                HashMap<Date, File> map = new HashMap<>();
-                                for (File file : files) {
-                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
-                                    map.put(dateFormat.parse(file.getName()), file);
-                                }
-
-                                // 将map的keySet转换为List并排序
-                                List<Date> sortedDates = new ArrayList<>(map.keySet());
-                                sortedDates.sort(Collections.reverseOrder()); // 降序排序，最新的在前
-
-                                // 获取最大的5个日期（最近的5个）
-                                List<Date> top5Dates = sortedDates.subList(0, 5);
-
-                                // 反选出其余的日期
-                                List<Date> remainingDates = sortedDates.subList(5, sortedDates.size());
-
-                                // 如果需要获取对应的文件
-                                List<File> top5Files = top5Dates.stream()
-                                        .map(map::get)
-                                        .toList();
-
-                                List<File> remainingFiles = remainingDates.stream()
-                                        .map(map::get)
-                                        .toList();
-
-                                Log.info.print(ClassFormPanel.class.toString(), "最近的5个文件夹：" + top5Files);
-                                Log.info.print(ClassFormPanel.class.toString(), "其余的文件夹：" + remainingFiles);
-
-                                for (File file : remainingFiles) {
-                                    if (file.exists() && file.isDirectory()) {
-                                        deleteDirectory(file);
-                                        Log.info.print(ClassFormPanel.class.toString(), "已删除旧文件夹: " + file.getAbsolutePath());
+                            if (files != null) {
+                                int recordingDirNum = Integer.parseInt(CTInfo.basicInf.getProperty("recordingDirNum", "5"));
+                                if (files.length > recordingDirNum) {
+                                    Log.info.print(ClassFormPanel.class.toString(), "符合的文件夹列表：" + Arrays.toString(files));
+                                    HashMap<Date, File> map = new HashMap<>();
+                                    for (File file : files) {
+                                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+                                        map.put(dateFormat.parse(file.getName()), file);
                                     }
-                                }
 
+                                    // 将map的keySet转换为List并排序
+                                    List<Date> sortedDates = new ArrayList<>(map.keySet());
+                                    sortedDates.sort(Collections.reverseOrder()); // 降序排序，最新的在前
+
+                                    // 获取最大的5个日期（最近的n个）
+                                    List<Date> top5Dates = sortedDates.subList(0, recordingDirNum);
+
+                                    // 反选出其余的日期
+                                    List<Date> remainingDates = sortedDates.subList(recordingDirNum, sortedDates.size());
+
+                                    // 如果需要获取对应的文件
+                                    List<File> top5Files = top5Dates.stream()
+                                            .map(map::get)
+                                            .toList();
+
+                                    List<File> remainingFiles = remainingDates.stream()
+                                            .map(map::get)
+                                            .toList();
+
+                                    Log.info.print(ClassFormPanel.class.toString(), "最近的"+recordingDirNum+"个文件夹：" + top5Files);
+                                    Log.info.print(ClassFormPanel.class.toString(), "其余的文件夹：" + remainingFiles);
+
+                                    for (File file : remainingFiles) {
+                                        if (file.exists() && file.isDirectory()) {
+                                            deleteDirectory(file);
+                                            Log.info.print(ClassFormPanel.class.toString(), "已删除旧文件夹: " + file.getAbsolutePath());
+                                        }
+                                    }
+
+                                }
                             }
                         }
 

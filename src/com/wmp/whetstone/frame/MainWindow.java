@@ -13,7 +13,7 @@ public class MainWindow {
     public static final ArrayList<CTViewPanel> allPanelList = new ArrayList<>();
 
 
-    public MainWindow(String path){
+    public MainWindow(){
 
         //添加组件
 

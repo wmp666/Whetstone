@@ -1,5 +1,7 @@
 package com.wmp.PublicTools.easter_egg_control;
 
+import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
+
 import java.util.Arrays;
 
 public record LoadedEasterEggUnit(BasicEasterEggUnit easterEggUnit, String[] args) {

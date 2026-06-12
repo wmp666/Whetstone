@@ -1,4 +1,6 @@
-package com.wmp.PublicTools.easter_egg_control;
+package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
+
+import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 
 public abstract class BasicEasterEggUnit {
     public abstract String getID();
@@ -11,6 +13,10 @@ public abstract class BasicEasterEggUnit {
     public abstract String getTargetVersion();
 
     public abstract String help();
+    public FuncHelpUnit[] funcHelps(){
+        return new FuncHelpUnit[0];
+    }
+
     public abstract void run(String[] args);
     public abstract void clear();
 

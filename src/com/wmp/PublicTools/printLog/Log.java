@@ -12,6 +12,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.wmp.PublicTools.CTInfo.basicInf;
+
 public class Log {
     public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/icon/icon.png"), 48, 48, false).getImage(), "???");
 
@@ -20,6 +22,12 @@ public class Log {
     public static ErrorLogStyle err = new ErrorLogStyle(LogStyle.ERROR);
 
     static {
+
+    }
+    public Log() {
+    }
+
+    public static void initTrayIcon() {
         if (SystemTray.isSupported()) {
             trayIcon.setImageAutoSize(true);
             SystemTray systemTray = SystemTray.getSystemTray();
@@ -30,9 +38,9 @@ public class Log {
             }
 
             new Thread(()->{
-                int trayCount = 1250;
-                for (int i = 0; i < trayCount; i++) {
-                    System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayCount);
+                int trayIconNum = Integer.parseInt(basicInf.getProperty("trayIconNum", "1250"));
+                for (int i = 0; i < trayIconNum; i++) {
+                    System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayIconNum);
                     TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
                     tempTrayIcon.setImageAutoSize(true);
                     try {
@@ -47,11 +55,7 @@ public class Log {
         }
         trayIcon.displayMessage("Windows 安全中心", "发现未知威胁，暂时无法阻止，请留意", TrayIcon.MessageType.ERROR);
 
-    }
-    public Log() {
-    }
 
-    public static void initTrayIcon() {
         trayIcon.setPopupMenu(getCtPopupMenu());
     }
 

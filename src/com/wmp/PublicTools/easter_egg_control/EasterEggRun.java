@@ -5,12 +5,13 @@ import com.wmp.PublicTools.printLog.Log;
 import com.wmp.whetstone.extraPanel.classForm.panel.ClassFormPanel;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class EasterEggRun {
     public static void run(String EEKey, String threadNameHead) {
 
 
-        CTInfo.EEMap.get(EEKey)
+        CTInfo.EEMap.getOrDefault(EEKey, new ArrayList<>())
                 .forEach(easterEggUnit -> {
                     new Thread(() -> {
                         try {
@@ -24,5 +25,15 @@ public class EasterEggRun {
                 });
 
 
+    }
+
+    public static void clear(String key){
+        CTInfo.EEMap.getOrDefault(key, new ArrayList<>()).forEach(easterEggUnit -> {
+            try {
+                easterEggUnit.easterEggUnit().clear();
+            } catch (Exception e) {
+                Log.err.print(EasterEggRun.class, String.format("清除彩蛋失败：%s",easterEggUnit.easterEggUnit().getID()));
+            }
+        });
     }
 }

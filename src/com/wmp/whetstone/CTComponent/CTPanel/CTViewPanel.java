@@ -2,11 +2,8 @@ package com.wmp.whetstone.CTComponent.CTPanel;
 
 import com.wmp.PublicTools.appFileControl.CTInfoControl;
 import com.wmp.PublicTools.printLog.Log;
-import com.wmp.whetstone.CTComponent.CTPanel.setsPanel.CTSetsPanel;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class CTViewPanel<T> extends CTPanel {
 
@@ -21,7 +18,6 @@ public abstract class CTViewPanel<T> extends CTPanel {
      * 用于保存数据,且一个组件最多拥有一个
      */
     private final CTInfoControl<T> infoControl;
-    private List<CTSetsPanel> ctSetsPanelList = new ArrayList<>();
     private boolean isScreenProductViewPanel = false;
     private boolean independentRefresh = false;
     /**
@@ -32,18 +28,6 @@ public abstract class CTViewPanel<T> extends CTPanel {
     public CTViewPanel() {
         super();
         infoControl = setInfoControl();
-    }
-
-    public List<CTSetsPanel> getCtSetsPanelList() {
-        return ctSetsPanelList;
-    }
-
-    public void setCtSetsPanelList(List<CTSetsPanel> ctSetsPanelList) {
-        this.ctSetsPanelList = ctSetsPanelList;
-    }
-
-    public void toScreenProductViewPanel() {
-        isScreenProductViewPanel = true;
     }
 
     public boolean isScreenProductViewPanel() {

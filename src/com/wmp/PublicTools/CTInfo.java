@@ -4,26 +4,25 @@ import com.wmp.Main;
 import com.wmp.PublicTools.appFileControl.IconControl;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfo;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfoControl;
-import com.wmp.PublicTools.easter_egg_control.BasicEasterEggUnit;
+import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
 import com.wmp.PublicTools.easter_egg_control.LoadedEasterEggUnit;
 import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
 import com.wmp.recording.tools.GetRecordingInfo;
+import com.wmp.whetstone.Receiver;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.sound.sampled.Mixer;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CTInfo {
     public static double dpi = 1.0;
@@ -41,22 +40,31 @@ public class CTInfo {
     public static String version = Main.version;
     public static final String DEVELOP_VERSION = Main.developVersion;
 
-    public static List<BasicEasterEggUnit> easterEggUnits = EasterEggControl.installAll(false);
+    public static List<BasicEasterEggUnit> easterEggUnits = EasterEggControl.installAll(Main.isHasTheArg("无视兼容问题"));
     public static Map<String, List<LoadedEasterEggUnit>> EEMap = new HashMap<>();
 
     public static AppInfo appInfo = new AppInfo(5, false);
+
+    public static final Properties basicInf = new Properties();
 
     static {
         initCTRunImportInfo();
     }
 
     public static void init() {
+        try {
+            basicInf.load(new FileReader(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "settings.properties")));
+        } catch (IOException e) {
+            System.err.println("读取设置文件失败");
+        }
 
         initCTRunImportInfo();
 
         initCTBasicInfo();
 
         initEEInfo();
+
+        Receiver.initSever(Integer.parseInt(basicInf.getProperty("serverPort", "8697")));
 
         List<Mixer.Info> infos = GetRecordingInfo.enumerateInputDevices();
         StringBuilder sb = new StringBuilder();

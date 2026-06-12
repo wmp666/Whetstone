@@ -1,8 +1,10 @@
-package com.wmp.PublicTools.easter_egg_control;
+package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
 
 import com.sun.jna.Function;
 import com.sun.jna.NativeLibrary;
 import com.wmp.PublicTools.CTInfo;
+import com.wmp.PublicTools.easter_egg_control.DLLVar;
+import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.util.ArrayList;
@@ -10,9 +12,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class DLLEasterEggUnit extends BasicEasterEggUnit {
+public final class DLLEasterEggUnit extends BasicEasterEggUnit {
 
     private final NativeLibrary dll;
+
+    private boolean isWhile = true;
 
     public DLLEasterEggUnit(NativeLibrary dll) {
         this.dll = dll;
@@ -53,7 +57,7 @@ public class DLLEasterEggUnit extends BasicEasterEggUnit {
             Thread.sleep(sleep_before.get());
 
             if (funcList.contains("while")){
-                while (true){
+                while (isWhile){
                     function.invokeVoid(inArgs.toArray());
                     Thread.sleep(sleep_while.get());
                 }
@@ -130,7 +134,14 @@ public class DLLEasterEggUnit extends BasicEasterEggUnit {
     }
 
     @Override
+    public FuncHelpUnit[] funcHelps() {
+        return null;
+    }
+
+    @Override
     public void clear() {
+        isWhile = false;
+
         try {
             dll.getFunction("clear").invokeVoid(new Object[0]);
         }catch (Error | Exception e) {
