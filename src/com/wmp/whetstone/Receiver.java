@@ -2,10 +2,10 @@ package com.wmp.whetstone;
 
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.HelpDoc;
+import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,37 +29,32 @@ public class Receiver {
 
                     Log.info.print(Receiver.class.toString(), "接收到数据：" + msg);
                     runCommand(msg);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Log.err.print(Receiver.class, "接收数据失败", e);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.err.print(Receiver.class, "服务器启动失败", e);
         }
     }
 
     public static void runCommand(String command) {
-        if (command.startsWith("help:")) {
-            String next = command.substring(5);
-            switch (next) {
-                case "user"-> HelpDoc.userHelp();
-                case "developer"-> HelpDoc.developerHelp();
-                default -> {
-                    if (next.startsWith("EE:")) {
-                        String EEID = next.substring(3);
-                        if (EEID.equals("all")) HelpDoc.AllEEHelp();
-                        else HelpDoc.EEHelp(EEID);
-                    }
-                }
-
-            }
+        if (command.startsWith("help")) {
+            HelpDoc.help();
         } else if (command.startsWith("run:EE:")) {
             String[] list = command.substring(7).split(";");
 
-            CTInfo.easterEggUnits.stream().filter(easterEggUnit -> list[0].equals(easterEggUnit.getID())).forEach(easterEggUnit -> {
+            CTInfo.easterEggUnits.stream().filter(easterEggUnit ->
+                    list[0].equals(easterEggUnit.getID())).forEach(easterEggUnit -> {
                 easterEggUnit.run(Arrays.copyOfRange(list, 1, list.length));
             });
-        } else {
+        } else if (command.startsWith("clear:EE:")) {
+            String id = command.substring(9);
+            CTInfo.easterEggUnits.stream().filter(easterEggUnit ->
+                    id.equals(easterEggUnit.getID())).forEach(BasicEasterEggUnit::clear);
+        } else if (command.startsWith("exit")){
+            System.exit(0);
+        }else {
             Log.warn.print(Receiver.class.toString(), "无效的命令");
         }
     }

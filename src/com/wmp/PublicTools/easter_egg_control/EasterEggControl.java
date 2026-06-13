@@ -133,6 +133,15 @@ public class EasterEggControl {
         return null;
     }
 
+    /**
+     * 判断两个版本号是否兼容
+     * @param targetVersion 目标版本
+     * @param localVersion 本地版本
+     * @return <ul>
+     *     <li>true:兼容
+     *     <li>false:不兼容
+     * </ul>
+     */
     public static boolean isCompatible(String targetVersion, String localVersion){
         int judgeVersion = judgeVersion(targetVersion, localVersion);
         int abs = Math.abs(judgeVersion);

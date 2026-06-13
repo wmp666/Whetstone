@@ -155,6 +155,28 @@ public class IOForInfo {
         }
     }
 
+    /**
+     * 递归删除目录及其所有内容
+     * @param directory 要删除的目录
+     */
+    public static boolean deleteDirectory(File directory) {
+        try {
+            if (directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        deleteDirectory(file);
+                    }
+                }
+            }
+            directory.delete();
+        } catch (Exception e) {
+            Log.err.print(IOForInfo.class, "创建文件失败", e);
+            return false;
+        }
+        return true;
+    }
+
     private boolean creativeFile(File file) throws IOException {
         Log.info.print("IOForInfo-创建文件", file.getPath() + "文件创建");
         file.getParentFile().mkdirs();

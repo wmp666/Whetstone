@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="WEE_RandomAccessFile:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WEE_RandomAccessFile_jar</output-path>
+    <root id="root">
+      <element id="archive" name="WEE_RandomAccessFile.jar">
+        <element id="module-output" name="WEE_RandomAccessFile" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -13,8 +13,13 @@ public abstract class BasicEasterEggUnit {
     public abstract String getTargetVersion();
 
     public abstract String help();
+
+    /**
+     * 获取方法帮助,若没有则会返回null
+     * @return 方法帮助
+     */
     public FuncHelpUnit[] funcHelps(){
-        return new FuncHelpUnit[0];
+        return null;
     }
 
     public abstract void run(String[] args);

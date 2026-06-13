@@ -135,6 +135,19 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
 
     @Override
     public FuncHelpUnit[] funcHelps() {
+        try {
+            Function function = dll.getFunction("funcHelps");
+            String s = function.invokeString(new Object[0], false);
+            String[] split = s.split(";");
+            FuncHelpUnit[] funcHelpUnits = new FuncHelpUnit[split.length];
+            for (int i = 0; i < split.length; i++) {
+                String[] split1 = split[i].split("\\|");
+                funcHelpUnits[i] = new FuncHelpUnit(split1[0], split1[1]);
+            }
+            return funcHelpUnits;
+        } catch (Error | Exception e) {
+            //Log.err.print(DLLEasterEggUnit.class, "dll作者未写该方法\n" + e);
+        }
         return null;
     }
 

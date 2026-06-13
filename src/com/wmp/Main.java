@@ -1,5 +1,6 @@
 package com.wmp;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.DrawingRights;
 import com.wmp.PublicTools.HelpDoc;
@@ -36,7 +37,7 @@ public class Main {
      *      <li>...
      * </ul>
      */
-    public static final String developVersion = "2.0.1";
+    public static final String developVersion = "2.0.2";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -49,10 +50,7 @@ public class Main {
         allArgs.put("无视兼容问题", StartupParameters.creative("/IC", "-IC"));
         allArgs.put("BasicDataPath", StartupParameters.creative("/BasicDataPath", "-BasicDataPath"));
 
-        allArgs.put("帮助:用户", StartupParameters.creative("/help:user", "-help:user"));
-        allArgs.put("帮助:开发", StartupParameters.creative("/help:develop", "-help:develop"));
-        allArgs.put("帮助:所有彩蛋", StartupParameters.creative("/help:EEID:all", "-help:EEID:all"));
-        allArgs.put("帮助:彩蛋", StartupParameters.creative("/help:EEID", "-help:EEID"));
+        allArgs.put("帮助", StartupParameters.creative("/help", "-help"));
 
     }
 
@@ -64,18 +62,12 @@ public class Main {
             System.out.println("使用的启动参数:" + Arrays.toString(args));
         }
 
-        if (isHasTheArg("帮助:用户")) {
-            HelpDoc.userHelp();
-            System.exit(0);
-        } else if (isHasTheArg("帮助:开发")) {
-            HelpDoc.developerHelp();
-            System.exit(0);
-        } else if (isHasTheArg("帮助:所有彩蛋")) {
-            HelpDoc.AllEEHelp();
-            System.exit(0);
-        } else if (isHasTheArg("帮助:彩蛋")) {
-            String EEID = getTheArgNextArg("帮助:彩蛋");
-            HelpDoc.EEHelp(EEID);
+        FlatMacLightLaf.setup();
+
+        if (isHasTheArg("帮助")) {
+            HelpDoc.help();
+            //等待到窗口关闭
+
             System.exit(0);
         }
 

@@ -12,5 +12,6 @@
     <orderEntry type="library" name="atlassian.commonmark" level="project" />
     <orderEntry type="library" name="cn.6tail.lunar" level="project" />
     <orderEntry type="library" name="net.java.dev.jna.platform" level="project" />
+    <orderEntry type="library" name="formdev.flatlaf" level="project" />
   </component>
 </module>
