@@ -21,11 +21,13 @@ import java.util.Objects;
 public class EasterEggControl {
     /**
      * 用于安装Jar和DLL
+     *
      * @param ignoringCompatibility 是否无视兼容性（针对Jar）
      * @return 彩蛋列表
      */
-    public static List<BasicEasterEggUnit> installAll(boolean ignoringCompatibility){
-        if (ignoringCompatibility) Log.warn.print("EasterEggControl", "正在忽略彩蛋兼容性");
+    public static List<BasicEasterEggUnit> installAll(boolean ignoringCompatibility) {
+        if (ignoringCompatibility)
+            Log.err.print(EasterEggControl.class, "正在忽略彩蛋兼容性", new RuntimeException("无视兼容性可能导致不稳定"));
 
         List<BasicEasterEggUnit> EEUnitList = new ArrayList<>();
         String appPath = GetPath.getAppPath(GetPath.SOURCE_FILE_PATH);
@@ -47,8 +49,7 @@ public class EasterEggControl {
                 } catch (Exception e) {
                     Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]失败", e);
                 }
-            }
-            else if (file.getName().endsWith(".dll")){
+            } else if (file.getName().endsWith(".dll")) {
                 //加载DLL
                 NativeLibrary library = NativeLibrary.getInstance(file.getAbsolutePath());
 
@@ -59,8 +60,8 @@ public class EasterEggControl {
         return EEUnitList;
     }
 
-    public static File[] getEasterEggFiles(File path){
-        ArrayList< File> arrayList = new ArrayList<>();
+    public static File[] getEasterEggFiles(File path) {
+        ArrayList<File> arrayList = new ArrayList<>();
         List.of(Objects.requireNonNull(path.listFiles())).forEach(file -> {
             if (file.isFile() && (file.getName().endsWith(".jar") || file.getName().endsWith(".dll"))) {
                 arrayList.add(file);
@@ -71,7 +72,7 @@ public class EasterEggControl {
         return arrayList.toArray(new File[0]);
     }
 
-    public static LoadedEasterEggUnit[] getLoadedEasterEggUnits(JSONArray jsonArray, Map<String, JSONObject> varMap, List<BasicEasterEggUnit> easterEggUnits){
+    public static LoadedEasterEggUnit[] getLoadedEasterEggUnits(JSONArray jsonArray, Map<String, JSONObject> varMap, List<BasicEasterEggUnit> easterEggUnits) {
         List<LoadedEasterEggUnit> loadedEasterEggUnits = new ArrayList<>();
         if (jsonArray == null) return new LoadedEasterEggUnit[0];
         for (Object o : jsonArray) {
@@ -86,14 +87,14 @@ public class EasterEggControl {
         return loadedEasterEggUnits.toArray(new LoadedEasterEggUnit[0]);
     }
 
-    private static LoadedEasterEggUnit getLoadedEasterEggUnit(JSONObject jsonObject, Map<String, JSONObject> varMap, List<BasicEasterEggUnit> easterEggUnits){
+    private static LoadedEasterEggUnit getLoadedEasterEggUnit(JSONObject jsonObject, Map<String, JSONObject> varMap, List<BasicEasterEggUnit> easterEggUnits) {
         String id = jsonObject.getString("id");
-        if (id.startsWith("var:")){
+        if (id.startsWith("var:")) {
             JSONObject var = varMap.get(id.substring(4));
             if (var != null) {
                 return getLoadedEasterEggUnit(var, varMap, easterEggUnits);
             }
-        } else if (id.startsWith("dll:")){
+        } else if (id.startsWith("dll:")) {
             //将数据转换为String[]
             ArrayList<String> list = new ArrayList<>();
             list.add(jsonObject.getString("funcName"));
@@ -109,20 +110,20 @@ public class EasterEggControl {
                     .orElse(null);
 
             return new LoadedEasterEggUnit(unit, list.toArray(new String[0]));
-        }else{
+        } else {
             //将数据转换为String[]
             ArrayList<String> list = new ArrayList<>();
             list.add(jsonObject.optString("func", ""));
             list.addAll(jsonObject.getJSONArray("args").toList().stream()
                     .map(Object::toString)
                     .toList());
-            
+
             // 查找对应的 BasicEasterEggUnit
             BasicEasterEggUnit unit = easterEggUnits.stream()
                     .filter(u -> u.getID().equals(id))
                     .findFirst()
                     .orElse(null);
-            
+
             if (unit != null) {
                 return new LoadedEasterEggUnit(unit, list.toArray(new String[0]));
             } else {
@@ -135,38 +136,45 @@ public class EasterEggControl {
 
     /**
      * 判断两个版本号是否兼容
+     *
      * @param targetVersion 目标版本
-     * @param localVersion 本地版本
+     * @param localVersion  本地版本
      * @return <ul>
-     *     <li>true:兼容
-     *     <li>false:不兼容
+     * <li>true:兼容
+     * <li>false:不兼容
      * </ul>
      */
-    public static boolean isCompatible(String targetVersion, String localVersion){
+    public static boolean isCompatible(String targetVersion, String localVersion) {
         int judgeVersion = judgeVersion(targetVersion, localVersion);
         int abs = Math.abs(judgeVersion);
-        if (abs >= 2 && abs <= 3){
+        if (abs >= 2 && abs <= 3) {
             Log.err.print(EasterEggControl.class, "版本不兼容:" + targetVersion + "->" + localVersion);
+        } else if (abs <= 1) {
+            Log.info.print(EasterEggControl.class.toString(), "版本兼容:" + targetVersion + "->" + localVersion);
+            return true;
         }
-        return abs <= 1;
+        return false;
     }
 
     /**
      * 比较两个版本号，两个版本号不能超过3位
+     *
      * @param version 将要比较的版本号
-     * @param local 被比较的版本号（本地）
+     * @param local   被比较的版本号（本地）
      * @return <ul>
-     *     <li>-3:<code>version</code><<code>local</code> 从第1位出现更改
-     *     <li>-2:<code>version</code><<code>local</code> 从第2位出现更改
-     *     <li>-1:<code>version</code><<code>local</code> 从第3位出现更改
-     *     <li>0:版本相等
-     *     <li>1:<code>version</code>><code>local</code> 从第3位出现更改
-     *     <li>2:<code>version</code>><code>local</code> 从第2位出现更改
-     *     <li>3:<code>version</code>><code>local</code> 从第1位出现更改
+     * <li>-3:<code>version</code><<code>local</code> 从第1位出现更改
+     * <li>-2:<code>version</code><<code>local</code> 从第2位出现更改
+     * <li>-1:<code>version</code><<code>local</code> 从第3位出现更改
+     * <li>0:版本相等
+     * <li>1:<code>version</code>><code>local</code> 从第3位出现更改
+     * <li>2:<code>version</code>><code>local</code> 从第2位出现更改
+     * <li>3:<code>version</code>><code>local</code> 从第1位出现更改
      *
      * </ul>
      */
     public static int judgeVersion(String version, String local) {
+        if (version.equals(local)) return 0;
+
         String[] remoteParts = version.split("\\.");
         String[] localParts = local.split("\\.");
         int maxLen = Math.max(remoteParts.length, localParts.length);
@@ -179,8 +187,6 @@ public class EasterEggControl {
                 return 3 - i;   // 远程版本更新，根据位数返回3/2/1
             } else if (versionVal < localVal) {
                 return -(3 - i);   // 本地版本更新，根据位数返回-3/-2/-1
-            } else{
-                return 0;
             }
         }
         return -100;

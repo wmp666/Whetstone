@@ -7,6 +7,7 @@ import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -64,9 +65,9 @@ public class IconControl {
         }
 
 
-            Map<String, ImageIcon> colorfulImageMap = getColorfulImageMap(DEFAULT_IMAGE_MAP, CTColor.mainColor);
-            COLORFUL_IMAGE_MAP.put("light", colorfulImageMap);
-            COLORFUL_IMAGE_MAP.put("dark", colorfulImageMap);
+        Map<String, ImageIcon> colorfulImageMap = getColorfulImageMap(DEFAULT_IMAGE_MAP, CTColor.mainColor);
+        COLORFUL_IMAGE_MAP.put("light", colorfulImageMap);
+        COLORFUL_IMAGE_MAP.put("dark", colorfulImageMap);
 
     }
 

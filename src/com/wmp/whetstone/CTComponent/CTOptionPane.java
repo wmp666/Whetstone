@@ -257,7 +257,7 @@ public class CTOptionPane {
                 dialog.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowOpened(WindowEvent e) {
-                        messagePanel.getViewport().setViewPosition(new Point(0,0));
+                        messagePanel.getViewport().setViewPosition(new Point(0, 0));
                     }
                 });
 
@@ -344,7 +344,7 @@ public class CTOptionPane {
      * @param owner         对话框的父组件
      * @param icon          对话框图标
      * @param iconType      对话框图标类型
-     * @param timeStyle         时间样式
+     * @param timeStyle     时间样式
      * @param isAlwaysOnTop 是否始终置顶
      * @return 时间选择结果
      */
@@ -549,14 +549,15 @@ public class CTOptionPane {
     }
 
     /**
-     *  显示选择对话框
-     * @param owner 主窗口
-     * @param title 标题
-     * @param message 信息
-     * @param icon 图标
-     * @param iconType 图标类型
+     * 显示选择对话框
+     *
+     * @param owner         主窗口
+     * @param title         标题
+     * @param message       信息
+     * @param icon          图标
+     * @param iconType      图标类型
      * @param isAlwaysOnTop 是否置顶
-     * @param choices 选项
+     * @param choices       选项
      * @return 选择的选项,未选择返回<code>new String[0]</code>
      */
     public static String[] showChoicesDialog(Component owner, String title, String message, Icon icon, int iconType, boolean isAlwaysOnTop, String... choices) {
@@ -641,11 +642,11 @@ public class CTOptionPane {
                     default -> GetIcon.getIcon("系统.提示.提示", IconControl.COLOR_COLORFUL, 50, 50);
                 };
                 iconLabel = new JLabel(tempIcon);
-                dialog.setIconImage(((ImageIcon)tempIcon).getImage());
+                dialog.setIconImage(((ImageIcon) tempIcon).getImage());
                 dialog.add(iconLabel, BorderLayout.WEST);//设置图标标签的位置 - 左
             } else {
                 iconLabel = new JLabel(icon);
-                dialog.setIconImage(((ImageIcon)icon).getImage());
+                dialog.setIconImage(((ImageIcon) icon).getImage());
                 dialog.add(iconLabel, BorderLayout.WEST);//设置图标标签的位置 - 左
             }
         }
@@ -674,7 +675,7 @@ public class CTOptionPane {
         return new BasicDialog(dialog, toolsPanel);
     }
 
-    private static void createChoiceButton(JDialog dialog, int optionType, ChoiceButtonListener  listener){
+    private static void createChoiceButton(JDialog dialog, int optionType, ChoiceButtonListener listener) {
         // 创建按钮面板
         {
             if (optionType == YES_NO_BUTTONS) {
@@ -730,6 +731,7 @@ public class CTOptionPane {
             }
         }
     }
+
     public static void showFullScreenMessageDialog(String title, String message) {
         showFullScreenMessageDialog(title, message, 0, 10);
     }

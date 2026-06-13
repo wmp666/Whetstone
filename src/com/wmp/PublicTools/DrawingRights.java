@@ -12,12 +12,13 @@ public interface DrawingRights extends Library {
 
     int RunAsAdmin(WString exePath, WString params);
 
-    class Tools{
-        public static boolean RunAsAdmin(String exePath, String params){
+    class Tools {
+        public static boolean RunAsAdmin(String exePath, String params) {
             Log.info.systemPrint("DrawingRights", "RunAsAdmin: " + exePath + " " + params);
             return DrawingRights.INSTANCE.RunAsAdmin(new WString(exePath), new WString(params)) == 1;
         }
-        public static boolean isAdmin(){
+
+        public static boolean isAdmin() {
             File testDir = new File(System.getenv("ProgramFiles"), "test_permission");
             try {
 

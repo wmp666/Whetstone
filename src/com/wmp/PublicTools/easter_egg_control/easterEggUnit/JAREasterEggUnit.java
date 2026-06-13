@@ -28,6 +28,7 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
     /**
      * 调用JAR中的方法
      * 功能：已";"分割
+     *
      * @param args 方法的参数 内容[功能, 传入参数...]
      */
     public void run(String[] args) {
@@ -54,12 +55,12 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
         try {
             Thread.sleep(sleep_before.get());
 
-            if (funcList.contains("while")){
-                while (isWhile){
+            if (funcList.contains("while")) {
+                while (isWhile) {
                     EEUnit_class.getDeclaredMethod("run", String[].class).invoke(temp, (Object) args);
                     Thread.sleep(sleep_while.get());
                 }
-            }else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))){
+            } else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))) {
                 int count = Integer.parseInt(funcList.stream().filter(func -> func.startsWith("for:")).findFirst().get().split(":")[1]);
                 for (int i = 0; i < count; i++) {
                     EEUnit_class.getDeclaredMethod("run", String[].class).invoke(temp, (Object) args);
@@ -79,6 +80,7 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
 
     /**
      * 获取功能列表
+     *
      * @param func 功能
      *             <ul>
      *             <li>while 循环</li>
@@ -89,9 +91,9 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
      *             </ul>
      * @return 功能列表
      */
-    private List<String> getFuncList(String func){
+    private List<String> getFuncList(String func) {
         String[] split = func.split(";");
-        List< String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         Collections.addAll(list, split);
         return list;
     }

@@ -12,71 +12,19 @@ import java.util.List;
 
 public class DisableGlassEffect {
 
-    // ====================== 1. 定义DWM API接口 ======================
-    public interface Dwmapi extends com.sun.jna.Library {
-        Dwmapi INSTANCE = Native.load("dwmapi", Dwmapi.class);
-
-        // 核心：禁用模糊背景
-        int DwmEnableBlurBehindWindow(WinDef.HWND hWnd, DWM_BLURBEHIND pBlurBehind);
-        // 核心：撤销/修改框架扩展
-        int DwmExtendFrameIntoClientArea(WinDef.HWND hWnd, MARGINS pMarInset);
-        // 设置窗口属性 (用于禁用新式效果，如Windows 11 Mica)
-        int DwmSetWindowAttribute(WinDef.HWND hwnd, int dwAttribute, Pointer pvAttribute, int cbAttribute);
-        // 检查DWM是否启用 (辅助判断)
-        int DwmIsCompositionEnabled(IntByReference pfEnabled);
-    }
-
-    // ====================== 2. 定义所需的结构体 ======================
-    // 用于 DwmEnableBlurBehindWindow
-    public static class DWM_BLURBEHIND extends Structure {
-        public static final int DWM_BB_ENABLE = 0x00000001;
-        public int dwFlags;
-        public int fEnable; // 关键：0 = 禁用，1 = 启用
-        public WinDef.HRGN hRgnBlur;
-        public int fTransitionOnMaximized;
-
-        public DWM_BLURBEHIND() {
-            dwFlags = DWM_BB_ENABLE; // 只操作“启用/禁用”标志
-            fEnable = 0;             // 明确设置为0以禁用
-            hRgnBlur = null;
-            fTransitionOnMaximized = 0;
-        }
-        @Override
-        protected List<String> getFieldOrder() {
-            return Arrays.asList("dwFlags", "fEnable", "hRgnBlur", "fTransitionOnMaximized");
-        }
-    }
-
-    // 用于 DwmExtendFrameIntoClientArea
-    public static class MARGINS extends Structure {
-        public int cxLeftWidth;
-        public int cxRightWidth;
-        public int cyTopHeight;
-        public int cyBottomHeight;
-        public MARGINS(int all) { this(all, all, all, all); }
-        public MARGINS(int l, int r, int t, int b) {
-            cxLeftWidth = l; cxRightWidth = r; cyTopHeight = t; cyBottomHeight = b;
-        }
-        @Override
-        protected List<String> getFieldOrder() {
-            return Arrays.asList("cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight");
-        }
-    }
-
     // ====================== 3. 定义关键常量 ======================
     // 分层窗口样式 (用于恢复窗口不透明)
     public static final int GWL_EXSTYLE = -20;
     public static final int WS_EX_LAYERED = 0x00080000;
     public static final int LWA_ALPHA = 0x00000002;
-
     // DWM窗口属性常量
     public static final int DWMWA_USE_HOSTBACKDROPBRUSH = 17; // Win10+
     public static final int DWMWA_SYSTEMBACKDROP_TYPE = 38;   // Win11 22H2+
     public static final int DWMSBT_NONE = 1; // 表示“无背景效果”
 
-    // ====================== 4. 核心禁用方法 ======================
     /**
      * 主方法：综合禁用各种毛玻璃效果
+     *
      * @param hWnd 目标窗口的句柄 (long类型，可从Swing/JavaFX窗口获取)
      * @return 成功返回true，否则返回false
      */
@@ -151,6 +99,70 @@ public class DisableGlassEffect {
         }
 
         return allSuccess;
+    }
+    // ====================== 1. 定义DWM API接口 ======================
+    public interface Dwmapi extends com.sun.jna.Library {
+        Dwmapi INSTANCE = Native.load("dwmapi", Dwmapi.class);
+
+        // 核心：禁用模糊背景
+        int DwmEnableBlurBehindWindow(WinDef.HWND hWnd, DWM_BLURBEHIND pBlurBehind);
+
+        // 核心：撤销/修改框架扩展
+        int DwmExtendFrameIntoClientArea(WinDef.HWND hWnd, MARGINS pMarInset);
+
+        // 设置窗口属性 (用于禁用新式效果，如Windows 11 Mica)
+        int DwmSetWindowAttribute(WinDef.HWND hwnd, int dwAttribute, Pointer pvAttribute, int cbAttribute);
+
+        // 检查DWM是否启用 (辅助判断)
+        int DwmIsCompositionEnabled(IntByReference pfEnabled);
+    }
+
+    // ====================== 2. 定义所需的结构体 ======================
+    // 用于 DwmEnableBlurBehindWindow
+    public static class DWM_BLURBEHIND extends Structure {
+        public static final int DWM_BB_ENABLE = 0x00000001;
+        public int dwFlags;
+        public int fEnable; // 关键：0 = 禁用，1 = 启用
+        public WinDef.HRGN hRgnBlur;
+        public int fTransitionOnMaximized;
+
+        public DWM_BLURBEHIND() {
+            dwFlags = DWM_BB_ENABLE; // 只操作“启用/禁用”标志
+            fEnable = 0;             // 明确设置为0以禁用
+            hRgnBlur = null;
+            fTransitionOnMaximized = 0;
+        }
+
+        @Override
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("dwFlags", "fEnable", "hRgnBlur", "fTransitionOnMaximized");
+        }
+    }
+
+    // ====================== 4. 核心禁用方法 ======================
+
+    // 用于 DwmExtendFrameIntoClientArea
+    public static class MARGINS extends Structure {
+        public int cxLeftWidth;
+        public int cxRightWidth;
+        public int cyTopHeight;
+        public int cyBottomHeight;
+
+        public MARGINS(int all) {
+            this(all, all, all, all);
+        }
+
+        public MARGINS(int l, int r, int t, int b) {
+            cxLeftWidth = l;
+            cxRightWidth = r;
+            cyTopHeight = t;
+            cyBottomHeight = b;
+        }
+
+        @Override
+        protected List<String> getFieldOrder() {
+            return Arrays.asList("cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight");
+        }
     }
 
 

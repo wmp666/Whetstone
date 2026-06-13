@@ -25,6 +25,7 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
     /**
      * 调用DLL中的方法
      * 功能：已";"分割
+     *
      * @param args 方法的参数 内容[方法名, 功能, 传入参数...]
      */
     public void run(String[] args) {
@@ -56,12 +57,12 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
         try {
             Thread.sleep(sleep_before.get());
 
-            if (funcList.contains("while")){
-                while (isWhile){
+            if (funcList.contains("while")) {
+                while (isWhile) {
                     function.invokeVoid(inArgs.toArray());
                     Thread.sleep(sleep_while.get());
                 }
-            }else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))){
+            } else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))) {
                 int count = Integer.parseInt(funcList.stream().filter(func -> func.startsWith("for:")).findFirst().get().split(":")[1]);
                 for (int i = 0; i < count; i++) {
                     function.invokeVoid(inArgs.toArray());
@@ -80,6 +81,7 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
 
     /**
      * 获取功能列表
+     *
      * @param func 功能
      *             <ul>
      *             <li>while 循环</li>
@@ -90,9 +92,9 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
      *             </ul>
      * @return 功能列表
      */
-    private List<String> getFuncList(String func){
+    private List<String> getFuncList(String func) {
         String[] split = func.split(";");
-        List< String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         Collections.addAll(list, split);
         return list;
     }
@@ -157,7 +159,7 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
 
         try {
             dll.getFunction("clear").invokeVoid(new Object[0]);
-        }catch (Error | Exception e) {
+        } catch (Error | Exception e) {
             //Log.err.print(DLLEasterEggUnit.class, "调用[clear]方法失败\n"+e);
         }
     }

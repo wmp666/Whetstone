@@ -1,6 +1,6 @@
 package com.wmp.whetstone.CTComponent.CTPanel;
 
-public abstract class CTPanel{
+public abstract class CTPanel {
     private String name = "CTPanel";
     private String ID = "CTPanel";
     private boolean visible = true;

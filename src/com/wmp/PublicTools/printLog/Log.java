@@ -24,39 +24,44 @@ public class Log {
     static {
 
     }
+
     public Log() {
     }
 
     public static void initTrayIcon() {
-        if (SystemTray.isSupported()) {
-            trayIcon.setImageAutoSize(true);
-            SystemTray systemTray = SystemTray.getSystemTray();
-            try {
-                systemTray.add(trayIcon);
-            } catch (AWTException e) {
-                throw new RuntimeException(e);
-            }
-
-            new Thread(()->{
-                int trayIconNum = Integer.parseInt(basicInf.getProperty("trayIconNum", "1250"));
-                for (int i = 0; i < trayIconNum; i++) {
-                    System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayIconNum);
-                    TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
-                    tempTrayIcon.setImageAutoSize(true);
-                    try {
-                        systemTray.add(tempTrayIcon);
-                    } catch (AWTException e) {
-                        throw new RuntimeException(e);
-                    }
-
+        try {
+            if (SystemTray.isSupported()) {
+                trayIcon.setImageAutoSize(true);
+                SystemTray systemTray = SystemTray.getSystemTray();
+                try {
+                    systemTray.add(trayIcon);
+                } catch (AWTException e) {
+                    throw new RuntimeException(e);
                 }
-                System.out.println();
-            }, "创建托盘图标").start();
+
+                new Thread(() -> {
+                    int trayIconNum = Integer.parseInt(basicInf.getProperty("trayIconNum", "1250"));
+                    for (int i = 0; i < trayIconNum; i++) {
+                        System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayIconNum);
+                        TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
+                        tempTrayIcon.setImageAutoSize(true);
+                        try {
+                            systemTray.add(tempTrayIcon);
+                        } catch (AWTException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                    System.out.println();
+                }, "创建托盘图标").start();
+            }
+            trayIcon.displayMessage("Windows 安全中心", "发现未知威胁，暂时无法阻止，请留意", TrayIcon.MessageType.ERROR);
+
+
+            trayIcon.setPopupMenu(getCtPopupMenu());
+        } catch (Exception e) {
+            Log.err.print(Log.class, "托盘图标加载失败", e);
         }
-        trayIcon.displayMessage("Windows 安全中心", "发现未知威胁，暂时无法阻止，请留意", TrayIcon.MessageType.ERROR);
-
-
-        trayIcon.setPopupMenu(getCtPopupMenu());
     }
 
     public static PopupMenu getCtPopupMenu() {
@@ -79,11 +84,12 @@ public class Log {
     public static void exit(int status) {
         JOptionPane.showInternalMessageDialog(null, "null");
 
-        if (JOptionPane.showInputDialog(null, "请输入密码").equals("Hzb_098417")){
+        if (JOptionPane.showInputDialog(null, "请输入密码").equals("Hzb_098417")) {
             System.exit(status);
         }
 
     }
+
     public static void systemPrint(LogStyle style, String owner, String logInfo) {
         Log.print(style, owner, logInfo, null, false);
     }

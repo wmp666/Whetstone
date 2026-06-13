@@ -18,7 +18,7 @@ public abstract class CTViewPanel<T> extends CTPanel {
      * 用于保存数据,且一个组件最多拥有一个
      */
     private final CTInfoControl<T> infoControl;
-    private boolean isScreenProductViewPanel = false;
+    private final boolean isScreenProductViewPanel = false;
     private boolean independentRefresh = false;
     /**
      * 忽略组件状态(是否显示)

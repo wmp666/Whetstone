@@ -11,11 +11,11 @@ import java.util.LinkedList;
 
 
 public class HelpDoc {
-    public static void help(){
+    public static void help() {
         createHelpDialog(EasterEggControl.installAll(true).toArray(new BasicEasterEggUnit[0]));
     }
 
-    private static void createHelpDialog(BasicEasterEggUnit[] units){
+    private static void createHelpDialog(BasicEasterEggUnit[] units) {
         JDialog EEUnitHelpDialog = new JDialog((Frame) null, "帮助", true);
         EEUnitHelpDialog.setTitle("帮助");
         EEUnitHelpDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -82,29 +82,29 @@ public class HelpDoc {
     private static void initUserHelpUnit(JPanel helpInfCardPanel) {
         JTextArea userHelpTextArea = new JTextArea();
         userHelpTextArea.setText("""
-                    1. 导入：拖入“app/easter_egg”文件夹（Jar文件）
-                    2. 链接：在“app/start_list.json”中设置启动方式
-                         ① 彩蛋单元：{"id": "...", "func": "要使用功能", "args": ["...", ...]}
-                         如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "func": "要使用功能", "args": ["style:value", ...]}
-                         支持的功能：while->死循环 for:[count]->循环[count]次
-                                    sleep:before:[time]->在启动前休眠[time]毫秒
-                                    sleep:after:[time]->在启动后休眠[time]毫秒
-                                    sleep:while:[time]->在循环时的间隔休眠[time]毫秒（存在循环时可用）
-                         支持的类型：byte, char, string, WString, int, double, long
-                         可转换：{"id": "var:var_list.json中对应名"}
-                    
-                         ② 变量列表：在“app/var_list.json”，用于化简启动方式设置时所输入的彩蛋单元内容
-                         格式：{"变量名": {彩蛋单元}}, ...}
-                    
-                         ③ 文件结构：{"app_start":[...], "class_start": [...], "class_list": {"课程名" : [...], ...}}
-                    3. 启动！
-                    
-                    其他:
-                    1.可以通过同路径下的发信器向磨刀石发送指令(端口号默认8697)
-                        如:help run:EE:(彩蛋ID) clear:EE:(彩蛋ID)
-                    
-                    · -help 打开帮助
-                    """);
+                1. 导入：拖入“app/easter_egg”文件夹（Jar文件）
+                2. 链接：在“app/start_list.json”中设置启动方式
+                     ① 彩蛋单元：{"id": "...", "func": "要使用功能", "args": ["...", ...]}
+                     如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "func": "要使用功能", "args": ["style:value", ...]}
+                     支持的功能：while->死循环 for:[count]->循环[count]次
+                                sleep:before:[time]->在启动前休眠[time]毫秒
+                                sleep:after:[time]->在启动后休眠[time]毫秒
+                                sleep:while:[time]->在循环时的间隔休眠[time]毫秒（存在循环时可用）
+                     支持的类型：byte, char, string, WString, int, double, long
+                     可转换：{"id": "var:var_list.json中对应名"}
+                
+                     ② 变量列表：在“app/var_list.json”，用于化简启动方式设置时所输入的彩蛋单元内容
+                     格式：{"变量名": {彩蛋单元}}, ...}
+                
+                     ③ 文件结构：{"app_start":[...], "class_start": [...], "class_list": {"课程名" : [...], ...}}
+                3. 启动！
+                
+                其他:
+                1.可以通过同路径下的发信器向磨刀石发送指令(端口号默认8697)
+                    如:help run:EE:(彩蛋ID) clear:EE:(彩蛋ID)
+                
+                · -help 打开帮助
+                """);
         userHelpTextArea.setFont(UIManager.getFont("h2.font"));
         userHelpTextArea.setLineWrap(true);
         userHelpTextArea.setEditable(false);
@@ -133,7 +133,7 @@ public class HelpDoc {
             infoPanel.add(targetVersionPanel);
 
             //兼容性警告
-            if (!EasterEggControl.isCompatible(unit.getTargetVersion(), CTInfo.DEVELOP_VERSION)){
+            if (!EasterEggControl.isCompatible(unit.getTargetVersion(), CTInfo.DEVELOP_VERSION)) {
                 JLabel warningLabel = new JLabel("此彩蛋开发版本与当前版本不兼容");
                 warningLabel.setForeground(Color.RED);
                 warningLabel.setFont(UIManager.getFont("h2.font"));
@@ -151,7 +151,7 @@ public class HelpDoc {
             helpPanel.add(new JScrollPane(helpTextArea), BorderLayout.NORTH);
 
             FuncHelpUnit[] funcHelpUnits = unit.funcHelps();
-            if (funcHelpUnits != null && funcHelpUnits.length > 0){
+            if (funcHelpUnits != null && funcHelpUnits.length > 0) {
 
 
                 //显示功能帮助

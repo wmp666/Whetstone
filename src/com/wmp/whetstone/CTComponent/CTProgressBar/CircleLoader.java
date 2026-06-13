@@ -12,8 +12,8 @@ import java.awt.geom.Arc2D;
  */
 public class CircleLoader extends JPanel {
     private final Timer timer;
-    private boolean isIndeterminate = true;
     private final int value = 0;
+    private boolean isIndeterminate = true;
     private float rotationAngle = 0;
     private float sweepAngle = 45; // 扇形角度
     /**

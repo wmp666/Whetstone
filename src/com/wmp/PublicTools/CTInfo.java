@@ -4,9 +4,9 @@ import com.wmp.Main;
 import com.wmp.PublicTools.appFileControl.IconControl;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfo;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfoControl;
-import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
 import com.wmp.PublicTools.easter_egg_control.LoadedEasterEggUnit;
+import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.io.GetPath;
 import com.wmp.PublicTools.io.IOForInfo;
 import com.wmp.PublicTools.printLog.Log;
@@ -25,6 +25,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class CTInfo {
+    public static final Properties basicInf = new Properties();
     public static double dpi = 1.0;
     public static int arcw = 1;
     public static int arch = 1;
@@ -36,16 +37,11 @@ public class CTInfo {
     public static String appName = "磨刀石";
     public static String author = "无名牌";
     public static String iconPath = "/image/icon/icon.png";
-
     public static String version = Main.version;
-    public static final String DEVELOP_VERSION = Main.developVersion;
-
-    public static List<BasicEasterEggUnit> easterEggUnits = EasterEggControl.installAll(Main.isHasTheArg("无视兼容问题"));
+    public static String DEVELOP_VERSION = Main.developVersion;
+    public static List<BasicEasterEggUnit> easterEggUnits = new ArrayList<>();
     public static Map<String, List<LoadedEasterEggUnit>> EEMap = new HashMap<>();
-
     public static AppInfo appInfo = new AppInfo(5, false);
-
-    public static final Properties basicInf = new Properties();
 
     static {
         initCTRunImportInfo();
@@ -68,7 +64,7 @@ public class CTInfo {
 
         List<Mixer.Info> infos = GetRecordingInfo.enumerateInputDevices();
         StringBuilder sb = new StringBuilder();
-        infos.forEach(info ->{
+        infos.forEach(info -> {
             sb.append(info.getName()).append("\n");
         });
         try {
@@ -82,6 +78,7 @@ public class CTInfo {
     }
 
     private static void initEEInfo() {
+        easterEggUnits = EasterEggControl.installAll(Main.isHasTheArg("无视兼容问题"));
         //获取原始Json数据
         JSONObject EEUnitsJson = new JSONObject();
         JSONObject varJson = new JSONObject();
@@ -100,7 +97,7 @@ public class CTInfo {
         //1.变量列表
         Map<String, JSONObject> varMap = new HashMap<>();
         varJson.toMap().forEach((key, value) -> {
-            if (value instanceof Map<?,?>) {
+            if (value instanceof Map<?, ?>) {
                 varMap.put(key, new JSONObject((Map<?, ?>) value));
             }
         });
@@ -115,7 +112,7 @@ public class CTInfo {
                 if (value instanceof JSONArray) {
                     EEMap.put(key,
                             List.of(EasterEggControl.getLoadedEasterEggUnits((JSONArray) value, varMap, easterEggUnits)));
-                }else if (value instanceof ArrayList<?>){
+                } else if (value instanceof ArrayList<?>) {
                     EEMap.put(key,
                             List.of(EasterEggControl.getLoadedEasterEggUnits(new JSONArray((ArrayList<?>) value), varMap, easterEggUnits)));
 

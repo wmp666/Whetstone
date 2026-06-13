@@ -27,7 +27,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "2.2.0";
+    public static final String version = "2.2.2";
     /**
      * 最多三位，用于判断开发Jar文件所需文件的更新情况<br>
      * 例如:
@@ -37,7 +37,7 @@ public class Main {
      *      <li>...
      * </ul>
      */
-    public static final String developVersion = "2.0.2";
+    public static final String developVersion = "2.1.0";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();
@@ -75,7 +75,7 @@ public class Main {
         if (!isHasTheArg("设置:不需要管理员")) {
             if (DrawingRights.Tools.isAdmin()) {
 
-            }else{
+            } else {
                 ResourceLocalizer.copyEmbeddedFile(CTInfo.TEMP_PATH + "\\Whetstone\\", "/resource/", "DrawingRights.dll");
 
                 try {
@@ -90,7 +90,7 @@ public class Main {
                         Log.info.print("Main", "启动参数:" + sb);
                         result = DrawingRights.Tools.RunAsAdmin("\"C:\\Program Files\\Java\\jdk-25\\bin\\java.exe\"", sb.toString());
 
-                    }else{
+                    } else {
                         result = DrawingRights.Tools.RunAsAdmin(new File(GetPath.getAppPath(GetPath.APPLICATION_PATH), "Whetstone.exe").getAbsolutePath(), "");
                     }
                     if (result) {

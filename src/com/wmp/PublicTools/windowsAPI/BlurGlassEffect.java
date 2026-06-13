@@ -9,36 +9,10 @@ import com.sun.jna.ptr.IntByReference;
 
 public class BlurGlassEffect {
 
-    // Dwmapi接口
-    public interface Dwmapi extends com.sun.jna.Library {
-        Dwmapi INSTANCE = Native.load("dwmapi", Dwmapi.class);
-
-        int DwmExtendFrameIntoClientArea(WinDef.HWND hWnd, DwmMargins pMarInset);
-        int DwmSetWindowAttribute(WinDef.HWND hwnd, int dwAttribute,
-                                  Pointer pvAttribute, int cbAttribute);
-        int DwmIsCompositionEnabled(IntByReference pfEnabled);
-    }
-
-    // 简化版MARGINS结构
-    public static class DwmMargins extends com.sun.jna.Structure {
-        public int cxLeftWidth;
-        public int cxRightWidth;
-        public int cyTopHeight;
-        public int cyBottomHeight;
-
-        @Override
-        protected java.util.List<String> getFieldOrder() {
-            return java.util.Arrays.asList(
-                    "cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight"
-            );
-        }
-    }
-
     // 窗口样式常量
     public static final int GWL_EXSTYLE = -20;
     public static final int WS_EX_LAYERED = 0x80000;
     public static final int WS_EX_COMPOSITED = 0x02000000;
-
     // DWM常量
     public static final int DWMWA_USE_HOSTBACKDROPBRUSH = 17;
     public static final int DWMWA_MICA_EFFECT = 1029;  // Windows 11特定的值
@@ -60,7 +34,7 @@ public class BlurGlassEffect {
         // LWA_ALPHA = 0x2, LWA_COLORKEY = 0x1
         User32.INSTANCE.SetLayeredWindowAttributes(hWnd,
                 0,            // 颜色键（不使用）
-                (byte)180,    // 透明度：180/255（约70%不透明）
+                (byte) 180,    // 透明度：180/255（约70%不透明）
                 0x2           // LWA_ALPHA标志
         );
     }
@@ -163,6 +137,33 @@ public class BlurGlassEffect {
             }
         } catch (Exception e) {
             System.out.println("不支持MICA效果: " + e.getMessage());
+        }
+    }
+
+    // Dwmapi接口
+    public interface Dwmapi extends com.sun.jna.Library {
+        Dwmapi INSTANCE = Native.load("dwmapi", Dwmapi.class);
+
+        int DwmExtendFrameIntoClientArea(WinDef.HWND hWnd, DwmMargins pMarInset);
+
+        int DwmSetWindowAttribute(WinDef.HWND hwnd, int dwAttribute,
+                                  Pointer pvAttribute, int cbAttribute);
+
+        int DwmIsCompositionEnabled(IntByReference pfEnabled);
+    }
+
+    // 简化版MARGINS结构
+    public static class DwmMargins extends com.sun.jna.Structure {
+        public int cxLeftWidth;
+        public int cxRightWidth;
+        public int cyTopHeight;
+        public int cyBottomHeight;
+
+        @Override
+        protected java.util.List<String> getFieldOrder() {
+            return java.util.Arrays.asList(
+                    "cxLeftWidth", "cxRightWidth", "cyTopHeight", "cyBottomHeight"
+            );
         }
     }
 

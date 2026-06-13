@@ -4,7 +4,18 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.WString;
 
 public record DLLVar(String value, String style) {
-    public Object toTargetStyle(){
+    /**
+     * 将传入的字符串转换成DLLVar
+     *
+     * @param str style:value
+     * @return DLLVar
+     */
+    public static DLLVar StringToVar(String str) {
+        String[] split = str.split(":", 2);
+        return new DLLVar(split[1], split[0]);
+    }
+
+    public Object toTargetStyle() {
         return switch (style) {
             case "byte" -> Byte.parseByte(value);
             case "char" -> value.charAt(0);
@@ -14,15 +25,5 @@ public record DLLVar(String value, String style) {
             case "long" -> new NativeLong(Long.parseLong(value));
             default -> value;
         };
-    }
-
-    /**
-     * 将传入的字符串转换成DLLVar
-     * @param str style:value
-     * @return DLLVar
-     */
-    public static DLLVar StringToVar(String str){
-        String[] split = str.split(":", 2);
-        return new DLLVar(split[1], split[0]);
     }
 }

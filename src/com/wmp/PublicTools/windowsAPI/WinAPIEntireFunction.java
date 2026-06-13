@@ -6,16 +6,19 @@ import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinNT;
-import com.wmp.PublicTools.windowsAPI.User32;
 
 public class WinAPIEntireFunction {
 
     public static final byte VK_LWIN = (byte) 0x5B;
     public static final byte VK_D = (byte) 0x44;
+    // 定义访问权限 (PROCESS_TERMINATE = 0x0001)
+    private static final int PROCESS_TERMINATE = 0x0001;
+    // 定义快照标志 (TH32CS_SNAPPROCESS = 0x00000002)
+    private static final WinDef.DWORD TH32CS_SNAPPROCESS = new WinDef.DWORD(0x00000002);
 
     public static void pressKey(byte... keyCodes) {
         //模拟按下
-        for (byte keyCode: keyCodes) {
+        for (byte keyCode : keyCodes) {
             User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0000, 0);
         }
 
@@ -31,11 +34,6 @@ public class WinAPIEntireFunction {
             User32.INSTANCE.keybd_event(keyCode, (byte) 0, 0x0002, 0);
         }
     }
-
-    // 定义访问权限 (PROCESS_TERMINATE = 0x0001)
-    private static final int PROCESS_TERMINATE = 0x0001;
-    // 定义快照标志 (TH32CS_SNAPPROCESS = 0x00000002)
-    private static final WinDef.DWORD TH32CS_SNAPPROCESS = new WinDef.DWORD(0x00000002);
 
     public static void killProcess(String processName, int exitCode) {
         WinNT.HANDLE snapShot = Kernel32.INSTANCE.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, new WinDef.DWORD(0));

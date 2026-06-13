@@ -21,10 +21,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
+    private static final AtomicReference<Recording.Info> recordingInfo = new AtomicReference<>();
     private String oldNowClassName = "无";
     private String oldNextClassName = "无";
-
-    private static final AtomicReference<Recording.Info> recordingInfo = new AtomicReference<>();
 
 
     public ClassFormPanel() {
@@ -33,6 +32,37 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
         this.setIgnoreState(true);
         this.setIndependentRefresh(true, 1000);
+    }
+
+    /**
+     * 递归删除目录及其所有内容
+     *
+     * @param directory 要删除的目录
+     */
+    private static void deleteDirectory(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteDirectory(file);
+                }
+            }
+        }
+        directory.delete();
+    }
+
+    /**
+     * 判断<code>classFormInfo</code>对应的课程是否在<code>classes</code>列表中
+     *
+     * @param classFormInfo 课程
+     * @param classes       课程列表
+     * @return 若<code>classes</code>列表中的一项包含<code>classFormInfo</code>对应的课程,则返回<code>true</code>
+     */
+    private static boolean containsTheClass(ClassFormInfo classFormInfo, String... classes) {
+        for (String aClass : classes) {
+            if (classFormInfo.className().contains(aClass)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -61,12 +91,12 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
 
                     ClassFormInfo finalNowClass = nowClass;
 
-                    if (nowClass.className().equals("无")){
+                    if (nowClass.className().equals("无")) {
                         EasterEggRun.clear(oldNowClassName);
-                    }else{
+                    } else {
                         EasterEggRun.run("class_start", "课程开始执行");
 
-                        EasterEggRun.run(finalNowClass.className(),  finalNowClass.className()+ "彩蛋");
+                        EasterEggRun.run(finalNowClass.className(), finalNowClass.className() + "彩蛋");
 
                     }
 
@@ -126,7 +156,7 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                                             .map(map::get)
                                             .toList();
 
-                                    Log.info.print(ClassFormPanel.class.toString(), "最近的"+recordingDirNum+"个文件夹：" + top5Files);
+                                    Log.info.print(ClassFormPanel.class.toString(), "最近的" + recordingDirNum + "个文件夹：" + top5Files);
                                     Log.info.print(ClassFormPanel.class.toString(), "其余的文件夹：" + remainingFiles);
 
                                     for (File file : remainingFiles) {
@@ -169,7 +199,6 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
                     }
 
 
-
                 }
 
 
@@ -183,37 +212,6 @@ public class ClassFormPanel extends CTViewPanel<ClassFormInfos[]> {
             }
 
 
-
         }
-    }
-
-    /**
-     * 递归删除目录及其所有内容
-     * @param directory 要删除的目录
-     */
-    private static void deleteDirectory(File directory) {
-        if (directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    deleteDirectory(file);
-                }
-            }
-        }
-        directory.delete();
-    }
-
-
-    /**
-     * 判断<code>classFormInfo</code>对应的课程是否在<code>classes</code>列表中
-     * @param classFormInfo 课程
-     * @param classes 课程列表
-     * @return 若<code>classes</code>列表中的一项包含<code>classFormInfo</code>对应的课程,则返回<code>true</code>
-     */
-    private static boolean containsTheClass(ClassFormInfo classFormInfo, String... classes){
-        for (String aClass : classes) {
-            if (classFormInfo.className().contains(aClass)) return true;
-        }
-        return false;
     }
 }

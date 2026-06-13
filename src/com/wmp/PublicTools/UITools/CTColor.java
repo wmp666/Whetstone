@@ -66,7 +66,6 @@ public class CTColor {
     private static void setMainTheme(String tempStyle) {
 
 
-        return;
     }
 
     /**

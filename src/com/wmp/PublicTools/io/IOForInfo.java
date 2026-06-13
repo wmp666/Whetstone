@@ -75,6 +75,29 @@ public class IOForInfo {
         return null;
     }
 
+    /**
+     * 递归删除目录及其所有内容
+     *
+     * @param directory 要删除的目录
+     */
+    public static boolean deleteDirectory(File directory) {
+        try {
+            if (directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        deleteDirectory(file);
+                    }
+                }
+            }
+            directory.delete();
+        } catch (Exception e) {
+            Log.err.print(IOForInfo.class, "创建文件失败", e);
+            return false;
+        }
+        return true;
+    }
+
     public String[] getInfo() throws IOException {
         String s = getInfos();
         if (s.equals("err")) {
@@ -153,28 +176,6 @@ public class IOForInfo {
             Log.err.print(IOForInfo.class, file.getPath() + "文件读取失败", e);
             return "err";
         }
-    }
-
-    /**
-     * 递归删除目录及其所有内容
-     * @param directory 要删除的目录
-     */
-    public static boolean deleteDirectory(File directory) {
-        try {
-            if (directory.isDirectory()) {
-                File[] files = directory.listFiles();
-                if (files != null) {
-                    for (File file : files) {
-                        deleteDirectory(file);
-                    }
-                }
-            }
-            directory.delete();
-        } catch (Exception e) {
-            Log.err.print(IOForInfo.class, "创建文件失败", e);
-            return false;
-        }
-        return true;
     }
 
     private boolean creativeFile(File file) throws IOException {
