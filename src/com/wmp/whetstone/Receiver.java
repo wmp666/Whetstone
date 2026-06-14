@@ -2,7 +2,6 @@ package com.wmp.whetstone;
 
 import com.wmp.PublicTools.CTInfo;
 import com.wmp.PublicTools.HelpDoc;
-import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.io.DataInputStream;
@@ -48,9 +47,10 @@ public class Receiver {
                 new Thread(() -> easterEggUnit.run(Arrays.copyOfRange(list, 1, list.length))).start();
             });
         } else if (command.startsWith("clear:EE:")) {
-            String id = command.substring(9);
+            //0-EEInfo 1-funcName
+            String[] EEInfo = command.substring(9).split(":", 2);
             CTInfo.easterEggUnits.stream().filter(easterEggUnit ->
-                    id.equals(easterEggUnit.getID())).forEach(BasicEasterEggUnit::clear);
+                    EEInfo[0].equals(easterEggUnit.getID())).forEach(basicEasterEggUnit -> basicEasterEggUnit.clear(EEInfo[1]));
         } else if (command.startsWith("refresh")) {
             CTInfo.init();
         } else if (command.startsWith("exit")) {

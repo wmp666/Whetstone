@@ -3,16 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/recording/Recording.iml" filepath="$PROJECT_DIR$/recording/Recording.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_3600safe/WEE_3600safe.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_3600safe/WEE_3600safe.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_FrameGlass/WEE_FrameGlass.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_FrameGlass/WEE_FrameGlass.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHacking/WEE_NJHacking.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHacking/WEE_NJHacking.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_RandomAccessFile/WEE_RandomAccessFile.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_RandomAccessFile/WEE_RandomAccessFile.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_RestartExplorer/WEE_RestartExplorer.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_RestartExplorer/WEE_RestartExplorer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_ScreenBlocking/WEE_ScreenBlocking.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_ScreenBlocking/WEE_ScreenBlocking.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_ShowDesktop/WEE_ShowDesktop.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_ShowDesktop/WEE_ShowDesktop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_UHelper/WEE_UHelper.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_UHelper/WEE_UHelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHackingBackage/WEE_NJHackingBackage.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHackingBackage/WEE_NJHackingBackage.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_VideoPlayer/WEE_VideoPlayer.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_VideoPlayer/WEE_VideoPlayer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_chuizis/WEE_chuizis.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_chuizis/WEE_chuizis.iml" />
       <module fileurl="file://$PROJECT_DIR$/Whetstone.iml" filepath="$PROJECT_DIR$/Whetstone.iml" />
     </modules>
   </component>

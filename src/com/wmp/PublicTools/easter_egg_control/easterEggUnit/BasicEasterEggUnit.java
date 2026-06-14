@@ -27,7 +27,7 @@ public abstract class BasicEasterEggUnit {
 
     public abstract void run(String[] args);
 
-    public abstract void clear();
+    public abstract void clear(String funcName);
 
     @Override
     public String toString() {

@@ -140,13 +140,16 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
         try {
             Function function = dll.getFunction("funcHelps");
             String s = function.invokeString(new Object[0], false);
+            Log.info.print(DLLEasterEggUnit.class.toString(), "获取的方法帮助：" + s);
             String[] split = s.split(";");
-            FuncHelpUnit[] funcHelpUnits = new FuncHelpUnit[split.length];
+            ArrayList<FuncHelpUnit> funcHelpUnits = new ArrayList<>();
+            //FuncHelpUnit[] funcHelpUnits = new FuncHelpUnit[split.length];
             for (int i = 0; i < split.length; i++) {
-                String[] split1 = split[i].split("\\|");
-                funcHelpUnits[i] = new FuncHelpUnit(split1[0], split1[1]);
+                String[] split1 = split[i].split("\\|", 2);
+                if (split1.length == 2) funcHelpUnits.add(new FuncHelpUnit(split1[0], split1[1]));
             }
-            return funcHelpUnits;
+            Log.info.print(DLLEasterEggUnit.class.toString(), "获取的方法帮助(Array)：" + funcHelpUnits);
+            return funcHelpUnits.toArray(new FuncHelpUnit[0]);
         } catch (Error | Exception e) {
             //Log.err.print(DLLEasterEggUnit.class, "dll作者未写该方法\n" + e);
         }
@@ -154,11 +157,11 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
     }
 
     @Override
-    public void clear() {
+    public void clear(String funcName) {
         isWhile = false;
 
         try {
-            dll.getFunction("clear").invokeVoid(new Object[0]);
+            dll.getFunction("clear").invokeVoid(new Object[]{funcName});
         } catch (Error | Exception e) {
             //Log.err.print(DLLEasterEggUnit.class, "调用[clear]方法失败\n"+e);
         }

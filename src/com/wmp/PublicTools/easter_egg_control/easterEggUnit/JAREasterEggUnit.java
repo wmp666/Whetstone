@@ -27,15 +27,15 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
 
     /**
      * 调用JAR中的方法
-     * 功能：已";"分割
+     * 功能：用";"分割
      *
-     * @param args 方法的参数 内容[功能, 传入参数...]
+     * @param args 方法的参数 内容[方法名, 功能, 传入参数...]
      */
     public void run(String[] args) {
-        List<String> funcList = getFuncList(args[0]);
-        //将传入的参数转换为对应类型
-        ArrayList<Object> inArgs = new ArrayList<>(Arrays.asList(args).subList(1, args.length));
-        Log.info.print(DLLEasterEggUnit.class.toString(), String.format("正在调用JAR中的方法|功能：%s|参数：%s", funcList, inArgs));
+        List<String> funcList = getFuncList(args[1]);
+        //传入的参数
+        ArrayList<String> inArgs = new ArrayList<>(Arrays.asList(args).subList(2, args.length));
+        Log.info.print(DLLEasterEggUnit.class.toString(), String.format("正在调用JAR中的方法：%s|功能：%s|参数：%s", args[0], funcList, inArgs));
 
 
         AtomicLong sleep_before = new AtomicLong();
@@ -55,25 +55,26 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
         try {
             Thread.sleep(sleep_before.get());
 
+            String[] tempArgs = inArgs.toArray(new String[0]);
             if (funcList.contains("while")) {
                 while (isWhile) {
-                    EEUnit_class.getDeclaredMethod("run", String[].class).invoke(temp, (Object) args);
+                    EEUnit_class.getDeclaredMethod(args[0], String[].class).invoke(temp, (Object) tempArgs);
                     Thread.sleep(sleep_while.get());
                 }
             } else if (funcList.stream().anyMatch(func -> func.startsWith("for:"))) {
                 int count = Integer.parseInt(funcList.stream().filter(func -> func.startsWith("for:")).findFirst().get().split(":")[1]);
                 for (int i = 0; i < count; i++) {
-                    EEUnit_class.getDeclaredMethod("run", String[].class).invoke(temp, (Object) args);
+                    EEUnit_class.getDeclaredMethod(args[0], String[].class).invoke(temp, (Object) tempArgs);
                     Thread.sleep(sleep_while.get());
                 }
             } else {
-                EEUnit_class.getDeclaredMethod("run", String[].class).invoke(temp, (Object) args);
+                EEUnit_class.getDeclaredMethod(args[0], String[].class).invoke(temp, (Object) tempArgs);
             }
 
 
             Thread.sleep(sleep_after.get());
         } catch (Exception e) {
-            Log.err.print(DLLEasterEggUnit.class, "调用[" + file.getName() + "]的[run]方法失败", e);
+            Log.err.print(DLLEasterEggUnit.class, "调用[" + file.getName() + "]的["+args[0]+"]方法失败", e);
         }
 
     }
@@ -150,11 +151,11 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
     }
 
     @Override
-    public void clear() {
+    public void clear(String funcName) {
         isWhile = false;
 
         try {
-            EEUnit_class.getDeclaredMethod("clear").invoke(temp);
+            EEUnit_class.getDeclaredMethod("clear", String.class).invoke(temp, funcName);
         } catch (Exception e) {
             Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[clear]方法失败", e);
         }

@@ -28,9 +28,10 @@ public class EasterEggRun {
     }
 
     public static void clear(String key) {
+        //获取到对应彩蛋单元
         CTInfo.EEMap.getOrDefault(key, new ArrayList<>()).forEach(easterEggUnit -> {
             try {
-                easterEggUnit.easterEggUnit().clear();
+                easterEggUnit.easterEggUnit().clear(easterEggUnit.args()[0]);
             } catch (Exception e) {
                 Log.err.print(EasterEggRun.class, String.format("清除彩蛋失败：%s", easterEggUnit.easterEggUnit().getID()));
             }

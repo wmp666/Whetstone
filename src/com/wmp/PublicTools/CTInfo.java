@@ -153,7 +153,6 @@ public class CTInfo {
 
         appInfo = new AppInfoControl().getInfo();
 
-        IconControl.init();
         Log.initTrayIcon();
     }
 }

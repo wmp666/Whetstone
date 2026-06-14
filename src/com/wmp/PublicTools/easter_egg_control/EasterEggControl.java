@@ -62,13 +62,16 @@ public class EasterEggControl {
 
     public static File[] getEasterEggFiles(File path) {
         ArrayList<File> arrayList = new ArrayList<>();
-        List.of(Objects.requireNonNull(path.listFiles())).forEach(file -> {
-            if (file.isFile() && (file.getName().endsWith(".jar") || file.getName().endsWith(".dll"))) {
-                arrayList.add(file);
-            } else if (file.isDirectory()) {
-                arrayList.addAll(List.of(getEasterEggFiles(file)));
-            }
-        });
+        try {
+            List.of(Objects.requireNonNull(path.listFiles())).forEach(file -> {
+                if (file.isFile() && (file.getName().endsWith(".jar") || file.getName().endsWith(".dll"))) {
+                    arrayList.add(file);
+                } else if (file.isDirectory()) {
+                    arrayList.addAll(List.of(getEasterEggFiles(file)));
+                }
+            });
+        } catch (Exception e) {
+        }
         return arrayList.toArray(new File[0]);
     }
 
@@ -97,7 +100,7 @@ public class EasterEggControl {
         } else if (id.startsWith("dll:")) {
             //将数据转换为String[]
             ArrayList<String> list = new ArrayList<>();
-            list.add(jsonObject.getString("funcName"));
+            list.add(jsonObject.optString("funcName", "getID"));
             list.add(jsonObject.optString("func", ""));
             list.addAll(jsonObject.getJSONArray("args").toList().stream()
                     .map(Object::toString)
@@ -113,6 +116,7 @@ public class EasterEggControl {
         } else {
             //将数据转换为String[]
             ArrayList<String> list = new ArrayList<>();
+            list.add(jsonObject.optString("funcName", "run"));
             list.add(jsonObject.optString("func", ""));
             list.addAll(jsonObject.getJSONArray("args").toList().stream()
                     .map(Object::toString)

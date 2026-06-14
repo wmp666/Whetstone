@@ -66,12 +66,25 @@ public class HelpDoc {
     private static void initDeveloperHelpUnit(JPanel helpInfCardPanel) {
         JTextArea developerHelpTextArea = new JTextArea();
         developerHelpTextArea.setText("""
+                Jar
                 1、添加库：将“WhetStone”整个项目导入为库，添加开发时所需的其他库
                 2、创建彩蛋基本单元：在“com.wmp.whetstone”中新建类“EasterEggUnit”并继承“BasicEasterEggUnit”
                 3、实现方法：实现所有抽象方法，并在getTargetVersion()中返回开发时所用磨刀石版本
-                    getID()中返回彩蛋ID    run(String[] args)中写入当彩蛋如何启动   clean()中写入如何清理彩蛋    getVersion()返回彩蛋版本
+                    getID()中返回彩蛋ID    clear()中写入如何清理彩蛋,会传入需要清理的方法名    getVersion()返回彩蛋版本
                     在help()中返回该彩蛋主要功能
-                    在funcHelp()中返回功能列表
+                    在funcHelps()中返回功能列表
+                4、编写彩蛋方法：可以使用任意名称，但是一定要在funcHelps()中,写明方法名和各参数作用
+                   参数：String[] args
+                
+                DLL
+                1.需要编写
+                    const char* getID()：彩蛋ID
+                    const char* getVersion()：版本号，a.b.c(不能超过三位),
+                    const char* help()：编写DLL主要作用
+                    const char* funcHelps()：各方法用法，编写规则 方法2名|功能介绍;方法2名|...;...
+                    const char* clear()：清理彩蛋(可以不写，如果不需要清理彩蛋)
+                2.编写彩蛋方法：可以使用任意名称，但是一定要在funcHelps()中,写明方法名和各参数作用
+                    可输入的参数：int, char, wchar_t, long, double, (const) char*, (const) wchar_t*, enum
                 """);
         developerHelpTextArea.setFont(UIManager.getFont("h2.font"));
         developerHelpTextArea.setLineWrap(true);
@@ -84,13 +97,13 @@ public class HelpDoc {
         userHelpTextArea.setText("""
                 1. 导入：拖入“app/easter_egg”文件夹（Jar文件）
                 2. 链接：在“app/start_list.json”中设置启动方式
-                     ① 彩蛋单元：{"id": "...", "func": "要使用功能", "args": ["...", ...]}
+                     ① 彩蛋单元：{"id": "...", "funcName":"JAR中方法名", "func": "要使用功能", "args": ["...", ...]}
                      如果调用的是dll：{"id": "dll:...", "funcName":"DLL中方法名", "func": "要使用功能", "args": ["style:value", ...]}
                      支持的功能：while->死循环 for:[count]->循环[count]次
                                 sleep:before:[time]->在启动前休眠[time]毫秒
                                 sleep:after:[time]->在启动后休眠[time]毫秒
                                 sleep:while:[time]->在循环时的间隔休眠[time]毫秒（存在循环时可用）
-                     支持的类型：byte, char, string, WString, int, double, long
+                     支持的类型：byte, char, string, WString, int, double, long(更多内容需查看映射表)
                      可转换：{"id": "var:var_list.json中对应名"}
                 
                      ② 变量列表：在“app/var_list.json”，用于化简启动方式设置时所输入的彩蛋单元内容
