@@ -3,9 +3,13 @@
 
 
 # 磨刀石
+让你的每节课都与众不同
 
 > 基于班级工具开发
-> 实现班级工具不能实现的神秘功能
+> 旨在拓展班级工具的功能
+
+
+
 
 # 开源仓库
 [ClassTools_JDK25](https://github.com/wmp666/ClassTools_JDK25/)
