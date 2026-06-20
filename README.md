@@ -14,9 +14,10 @@
 # 功能
 
 ## 已实现
-- [x] 磨刀石通过由班级工具生成的课表数据，智能匹配课程
-- [x] 通过**JAVA的反射机制**和[JNA](https://github.com/java-native-access/jna)实现动态导入**Jar类型**和**dll类型**的彩蛋（彩蛋开发应当基于相应规则开发）
-- [x] 支持通过网络发信器向磨刀石发出信息
+- [x] 磨刀石通过由班级工具生成的课表数据，智能匹配课程，结合课程配置，让你的每节课都与众不同
+- [x] 在有准确课表的前提下，磨刀石会智能收集每节课的内容，防止错过精彩瞬间
+- [x] 通过**JAVA的反射机制**和[JNA](https://github.com/java-native-access/jna)实现外部导入**Jar类型**和**dll类型**的彩蛋（彩蛋开发应当基于相应规则开发），让彩蛋的添加随心所欲
+- [x] 支持通过网络发信器向磨刀石发出信息，让磨刀石听从你的指挥
 
 ## 局限性
 - [ ] 网络发信器：由于网络端口的限制，只支持向一个磨刀石（第一次启动的）发出信息
@@ -54,3 +55,11 @@ GNU General Public License v3.0
 - [![Static Badge](https://img.shields.io/badge/Github-lib?style=flat&logo=github&label=FlatLaf)](https://github.com/JFormDesigner/FlatLaf)
 - [commonmark]()
 - ...
+
+# Q&A
+> **问：** 初次下载磨刀石，运行失败？
+> **答：** 第一次启动磨刀石需要配置一些基础数据，如：课程特色功能配置文件（start_list.json），基础信息文件（settings.propreties），彩蛋单元变量文件（var_list.json）
+
+> **问：** 每天都录音是否会占用大量空间？
+> **答：** 并不会，在默认情况下，磨刀石只会允许存档5天的数据，如需修改这一数据，可以查看用户使用帮助
+
