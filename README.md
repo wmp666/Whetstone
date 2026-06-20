@@ -22,7 +22,20 @@
 - [ ] 网络发信器：由于网络端口的限制，只支持向一个磨刀石（第一次启动的）发出信息
 
 # 彩蛋仓库
-- 磨刀石作者开发的：[![Static Badge](https://img.shields.io/badge/Github-Whetstone_EasterEgg?style=flat&logo=github&label=Whetstone_EasterEgg)](https://www.github.com/wmp666/Whetstone_EasterEgg)
+
+## 磨刀石作者开发
+[![Static Badge](https://img.shields.io/badge/Github-Whetstone_EasterEgg?style=flat&logo=github&label=Whetstone_EasterEgg)](https://www.github.com/wmp666/Whetstone_EasterEgg)
+
+## 共创者开发
+
+### [Karagarasu](https://github.com/Karagarasu)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=3600%E5%AE%89%E5%85%A8%E5%8D%AB%E5%A3%AB)](https://github.com/Karagarasu/3600safe)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=U%E7%9B%98%E5%8A%A9%E6%89%8B)](https://github.com/Karagarasu/Uhelper)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=%E9%9F%B3%E9%A2%91%E6%92%AD%E6%94%BE)](https://github.com/Karagarasu/PlaySound)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=%E5%88%9B%E5%BB%BA%E7%A9%BA%E7%99%BD%E9%9A%90%E8%97%8F%E5%A4%A7%E6%96%87%E4%BB%B6)](https://github.com/Karagarasu/CreatFile)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=%E9%9F%B3%E9%87%8F%E8%B0%83%E8%8A%82)](https://github.com/Karagarasu/SetSound)
+[![Static Badge](https://img.shields.io/badge/Github-ee?style=flat&logo=github&label=%E6%8F%90%E6%9D%83)](https://github.com/Karagarasu/GetRights)
+
 
 # 下载（磨刀石和彩蛋）
 [蓝奏云 密码:1234](https://wmp666.lanzouw.com/b00uzytpej)
