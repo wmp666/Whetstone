@@ -1,7 +1,6 @@
 [![stars](https://img.shields.io/github/stars/wmp666/Whetstone?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=Stars&labelColor=444444&color=eac54f)](https://github.com/wmp666/ClassTools_JDK25/)
 [![哔哩哔哩](https://img.shields.io/badge/主页-bilibili-00A4DB?style=flat&logo=bilibili&logoSize=auto&label=%E4%B8%BB%E9%A1%B5)](https://space.bilibili.com/1075810224)
 
-
 # 磨刀石 
 **让你的每节课都与众不同**
 
@@ -23,22 +22,22 @@
 - [ ] 网络发信器：由于网络端口的限制，只支持向一个磨刀石（第一次启动的）发出信息
 
 # 彩蛋仓库
-- 磨刀石作者开发的：[Whetstone_EasterEgg](https://www.github.com/wmp666/Whetstone_EasterEgg)
+- 磨刀石作者开发的：[![Static Badge](https://img.shields.io/badge/Github-Whetstone_EasterEgg?style=flat&logo=github&label=Whetstone_EasterEgg)](https://www.github.com/wmp666/Whetstone_EasterEgg)
 
 # 下载（磨刀石和彩蛋）
 [蓝奏云 密码:1234](https://wmp666.lanzouw.com/b00uzytpej)
 
 # 使用
-[WiKi](https://www.github.com/wmp666/Whetstone/wiki)
+[![Static Badge](https://img.shields.io/badge/WiKi-Whetstone?style=flat&logo=github&label=Whetstone)](https://www.github.com/wmp666/Whetstone/wiki)
 
 # 许可证
 GNU General Public License v3.0
 
 # 开源仓库
-- [ClassTools_JDK25](https://github.com/wmp666/ClassTools_JDK25/)
-- [Lunar](https://github.com/6tail/lunar-java)
+- [![Static Badge](https://img.shields.io/badge/Github-lib?style=flat&logo=github&label=ClassTools_JDK25)](https://github.com/wmp666/ClassTools_JDK25/)
+- [![Static Badge](https://img.shields.io/badge/Github-lib?style=flat&logo=github&label=Lunar)](https://github.com/6tail/lunar-java)
 - [json]()
-- [JNA](https://github.com/java-native-access/jna)
-- [FlatLaf](https://github.com/JFormDesigner/FlatLaf)
+- [![Static Badge](https://img.shields.io/badge/Github-lib?style=flat&logo=github&label=JNA)](https://github.com/java-native-access/jna)
+- [![Static Badge](https://img.shields.io/badge/Github-lib?style=flat&logo=github&label=FlatLaf)](https://github.com/JFormDesigner/FlatLaf)
 - [commonmark]()
 - ...
