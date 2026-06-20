@@ -8,6 +8,14 @@ public abstract class BasicEasterEggUnit {
     public abstract String getVersion();
 
     /**
+     * 是否支持打开多个彩蛋——<code>run()</code>，仍能关闭
+     * @return 是否支持，默认<code>false</code>
+     */
+    public boolean isSupportsMultipleEE(){
+        return false;
+    }
+
+    /**
      * 用于获取开发彩蛋时所用的磨刀石开发版本
      *
      * @return 版本号

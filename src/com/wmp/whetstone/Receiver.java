@@ -48,13 +48,13 @@ public class Receiver {
             });
         } else if (command.startsWith("clear:EE:")) {
             //0-EEInfo 1-funcName
-            String[] EEInfo = command.substring(9).split(":", 2);
+            String[] EEInfo = command.substring(9).split(";", 2);
             CTInfo.easterEggUnits.stream().filter(easterEggUnit ->
                     EEInfo[0].equals(easterEggUnit.getID())).forEach(basicEasterEggUnit -> basicEasterEggUnit.clear(EEInfo[1]));
         } else if (command.startsWith("refresh")) {
             CTInfo.init();
         } else if (command.startsWith("exit")) {
-            System.exit(0);
+            Runtime.getRuntime().halt(0);
         } else {
             Log.warn.print(Receiver.class.toString(), "无效的命令");
         }

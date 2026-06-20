@@ -3,8 +3,8 @@ package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
 import com.sun.jna.Function;
 import com.sun.jna.NativeLibrary;
 import com.wmp.PublicTools.CTInfo;
-import com.wmp.PublicTools.easter_egg_control.DLLVar;
 import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
+import com.wmp.PublicTools.easter_egg_control.var.Var;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
         ArrayList<Object> inArgs = new ArrayList<>();
         //将传入的参数转换为对应类型
         for (int i = 2; i < args.length; i++) {
-            inArgs.add(DLLVar.StringToVar(args[i]).toTargetStyle());
+            inArgs.add(Var.StringToVar(args[i]).toTargetStyle());
         }
         List<String> funcList = getFuncList(args[1]);
         Log.info.print(DLLEasterEggUnit.class.toString(), String.format("正在调用DLL中的方法：%s|功能：%s|参数：%s", args[0], funcList, inArgs));

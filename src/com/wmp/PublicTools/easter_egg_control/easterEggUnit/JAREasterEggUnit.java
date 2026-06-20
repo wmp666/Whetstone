@@ -106,7 +106,7 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
             return (String) EEUnit_class.getDeclaredMethod("getID").invoke(temp);
         } catch (Exception e) {
             Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getID]方法失败", e);
-            return null;
+            return file.getName();
         }
     }
 
@@ -116,7 +116,7 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
             return (String) EEUnit_class.getDeclaredMethod("getVersion").invoke(temp);
         } catch (Exception e) {
             Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getVersion]方法失败", e);
-            return null;
+            return "获取失败";
         }
     }
 
@@ -125,8 +125,8 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
         try {
             return (String) EEUnit_class.getDeclaredMethod("getTargetVersion").invoke(temp);
         } catch (Exception e) {
-            Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[getTargetVersion]方法失败", e);
-            return null;
+            Log.err.print(EasterEggControl.class, "运行[" + file.getName() + "]的[getTargetVersion]方法失败", e);
+            return "";
         }
     }
 
@@ -135,8 +135,8 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
         try {
             return (String) EEUnit_class.getDeclaredMethod("help").invoke(temp);
         } catch (Exception e) {
-            Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[help]方法失败", e);
-            return null;
+            Log.err.print(EasterEggControl.class, "运行[" + file.getName() + "]的[help]方法失败", e);
+            return "空白";
         }
     }
 
@@ -145,7 +145,7 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
         try {
             return (FuncHelpUnit[]) EEUnit_class.getDeclaredMethod("funcHelps").invoke(temp);
         } catch (Exception e) {
-            Log.err.print(EasterEggControl.class, "安装[" + file.getName() + "]的[funcHelps]方法失败", e);
+            Log.err.print(EasterEggControl.class, "运行[" + file.getName() + "]的[funcHelps]方法失败", e);
             return null;
         }
     }
