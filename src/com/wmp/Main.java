@@ -27,7 +27,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "2.4.0";
+    public static final String version = "2.4.1";
     /**
      * 最多三位，用于判断开发Jar文件所需文件的更新情况<br>
      * 例如:

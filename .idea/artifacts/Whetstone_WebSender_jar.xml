@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Whetstone_WebSender:jar">
+    <output-path>$PROJECT_DIR$/../Whetstone_EasterEgg/Whetstone_WebSender/out/artifacts/Whetstone_WebSender_jar</output-path>
+    <root id="archive" name="Whetstone_WebSender.jar">
+      <element id="module-output" name="Whetstone_WebSender" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Whetstone_EasterEgg/Whetstone_WebSender/lib/develop_tool.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

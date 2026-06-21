@@ -3,6 +3,7 @@ package com.wmp.PublicTools;
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
 import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
+import io.github.raghultech.markdown.swingfx.preview.MarkdownPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,8 +65,7 @@ public class HelpDoc {
     }
 
     private static void initDeveloperHelpUnit(JPanel helpInfCardPanel) {
-        JTextArea developerHelpTextArea = new JTextArea();
-        developerHelpTextArea.setText("""
+        MarkdownPanel markdownPanel = new MarkdownPanel("""
             ## Jar
             1. 添加库：将`WhetStone`整个项目导入为库，添加开发时所需的其他库
             2. 创建彩蛋基本单元：在`com.wmp.whetstone`中新建类`EasterEggUnit`
@@ -89,15 +89,12 @@ public class HelpDoc {
             2. 编写彩蛋方法：可以使用任意名称，但是一定要在funcHelps()中,写明方法名和各参数作用
                 可输入的参数：int, char, wchar_t, long, double, (const) char*, (const) wchar_t*, enum
             """);
-        developerHelpTextArea.setFont(UIManager.getFont("h2.font"));
-        developerHelpTextArea.setLineWrap(true);
-        developerHelpTextArea.setEditable(false);
-        helpInfCardPanel.add(new JScrollPane(developerHelpTextArea), "开发者帮助");
+        markdownPanel.setFont(UIManager.getFont("h2.font"));
+        helpInfCardPanel.add(markdownPanel, "开发者帮助");
     }
 
     private static void initUserHelpUnit(JPanel helpInfCardPanel) {
-        JTextArea userHelpTextArea = new JTextArea();
-        userHelpTextArea.setText("""
+        MarkdownPanel markdownPanel = new MarkdownPanel("""
                 # 课程特色功能设置
                 > 将于2.3.0正式实行——因为部分功能还在开发=)
                 
@@ -186,10 +183,8 @@ public class HelpDoc {
                    - -help 打开帮助
                    - -admin:noneed 去除启动时的提权操作
                 """);
-        userHelpTextArea.setFont(UIManager.getFont("h2.font"));
-        userHelpTextArea.setLineWrap(true);
-        userHelpTextArea.setEditable(false);
-        helpInfCardPanel.add(new JScrollPane(userHelpTextArea), "用户帮助");
+        markdownPanel.setFont(UIManager.getFont("h2.font"));
+        helpInfCardPanel.add(markdownPanel, "用户帮助");
     }
 
     private static void initEEHelpUnit(BasicEasterEggUnit[] units, JPanel helpInfCardPanel) {
@@ -199,29 +194,24 @@ public class HelpDoc {
             helpInfPanel.setLayout(new BorderLayout());
 
             //显示ID
-            JTextArea idTextArea = new JTextArea("彩蛋ID: " + unit.getID());
+            JTextArea idTextArea = new JTextArea(unit.getID());
             idTextArea.setFont(UIManager.getFont("h0.font"));
             helpInfPanel.add(idTextArea, BorderLayout.NORTH);
 
             //显示其他信息
-            JPanel infoPanel = new JPanel(new GridLayout(0, 1, 5, 5));
 
-            JLabel versionPanel = new JLabel("彩蛋版本: " + unit.getVersion());
-            JLabel targetVersionPanel = new JLabel("彩蛋开发版本: " + unit.getTargetVersion());
-            versionPanel.setFont(UIManager.getFont("h2.font"));
-            targetVersionPanel.setFont(UIManager.getFont("h2.font"));
-            infoPanel.add(versionPanel);
-            infoPanel.add(targetVersionPanel);
-
+            //使用Markdown加载信息
+            StringBuilder sb = new StringBuilder();
+            sb.append("### 彩蛋ID\n**").append(unit.getID()).append("**\n")
+                    .append("### 彩蛋版本\n**").append(unit.getVersion()).append("**\n");
             //兼容性警告
             if (!EasterEggControl.isCompatible(unit.getTargetVersion(), CTInfo.DEVELOP_VERSION)) {
-                JLabel warningLabel = new JLabel("此彩蛋开发版本与当前版本不兼容");
-                warningLabel.setForeground(Color.RED);
-                warningLabel.setFont(UIManager.getFont("h2.font"));
-                infoPanel.add(warningLabel);
+                sb.append("### ~~彩蛋开发版本\n**").append(unit.getTargetVersion()).append("**\n");
             }
+            sb.append("### 是否支持同时启动多个彩蛋\n**").append(unit.isSupportsMultipleEE()).append("**\n");
 
-            helpInfPanel.add(new JScrollPane(infoPanel), BorderLayout.WEST);
+            MarkdownPanel infoPanel = new MarkdownPanel(sb.toString());
+            infoPanel.setMinimumSize(new Dimension());
 
             //显示彩蛋使用帮助
             JPanel helpPanel = new JPanel(new BorderLayout());
@@ -231,40 +221,32 @@ public class HelpDoc {
             helpTextArea.setFont(UIManager.getFont("h2.font"));
             helpPanel.add(new JScrollPane(helpTextArea), BorderLayout.NORTH);
 
+            //各个方法的帮助
             FuncHelpUnit[] funcHelpUnits = unit.funcHelps();
             if (funcHelpUnits != null && funcHelpUnits.length > 0) {
 
+                JTabbedPane funcHelpTabbedPane = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
-                //显示功能帮助
-                JPanel funcHelpPanel = new JPanel(new BorderLayout());
-                //显示功能列表
-                JList<String> funcHelpList = new JList<>(
-                        Arrays.stream(funcHelpUnits).map(FuncHelpUnit::funcName).toList().toArray(new String[0]));
-                funcHelpList.setFont(UIManager.getFont("h2.font"));
-                funcHelpList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-                funcHelpPanel.add(new JScrollPane(funcHelpList), BorderLayout.WEST);
-                //显示功能帮助
-                JTextArea funcHelpTextArea = new JTextArea(funcHelpUnits[0].help());
-                funcHelpTextArea.setLineWrap(true);
-                funcHelpTextArea.setEditable(false);
-                funcHelpTextArea.setFont(UIManager.getFont("h2.font"));
-                funcHelpPanel.add(new JScrollPane(funcHelpTextArea), BorderLayout.CENTER);
+                Arrays.stream(funcHelpUnits).forEach(funcHelp->{
+                    //显示功能帮助
+                    JTextArea funcHelpTextArea = new JTextArea(funcHelp.help());
+                    funcHelpTextArea.setLineWrap(true);
+                    funcHelpTextArea.setEditable(false);
+                    funcHelpTextArea.setFont(UIManager.getFont("h2.font"));
 
 
-                //初始化列表监听
-                funcHelpList.addListSelectionListener(e -> {
-                    if (!e.getValueIsAdjusting()) {
-                        int index = funcHelpList.getSelectedIndex();
-                        if (index >= 0) {
-                            funcHelpTextArea.setText(funcHelpUnits[index].help());
-                        }
-                    }
+                    funcHelpTabbedPane.addTab(funcHelp.funcName(), funcHelpTextArea);
                 });
 
-                helpPanel.add(funcHelpPanel, BorderLayout.CENTER);
+                helpPanel.add(funcHelpTabbedPane, BorderLayout.CENTER);
             }
 
-            helpInfPanel.add(helpPanel, BorderLayout.CENTER);
+            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, helpPanel, infoPanel);
+
+
+            splitPane.setDividerLocation(200);
+            //splitPane.setOneTouchExpandable(true);
+            helpInfPanel.add(splitPane, BorderLayout.CENTER);
 
             //添加卡片
             helpInfCardPanel.add(helpInfPanel, unit.getID());

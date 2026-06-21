@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHackingBackage/WEE_NJHackingBackage.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_NJHackingBackage/WEE_NJHackingBackage.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_VideoPlayer/WEE_VideoPlayer.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/WEE_VideoPlayer/WEE_VideoPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/Whetstone.iml" filepath="$PROJECT_DIR$/Whetstone.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Whetstone_EasterEgg/Whetstone_WebSender/Whetstone_WebSender.iml" filepath="$PROJECT_DIR$/../Whetstone_EasterEgg/Whetstone_WebSender/Whetstone_WebSender.iml" />
     </modules>
   </component>
 </project>

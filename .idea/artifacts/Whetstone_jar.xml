@@ -4,12 +4,88 @@
     <root id="archive" name="Whetstone.jar">
       <element id="module-output" name="Recording" />
       <element id="module-output" name="Whetstone" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lunar/lunar-1.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20210307.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/flatlaf/flatlaf-3.7.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna/jna-platform-5.18.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna/jna-5.18.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commonmark/commonmark-0.17.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20210307.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/flatlaf/flatlaf-3.7.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lunar/lunar-1.7.7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/swingfx-markdown-preview-all-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-controls-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-controls-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-web-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-web-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-media-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-media-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-graphics-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-graphics-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-fxml-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-fxml-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-base-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-base-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-swing-17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/javafx-swing-17-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-all-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-abbreviation-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-admonition-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-anchorlink-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-aside-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-attributes-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-autolink-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/autolink-0.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-definition-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-emoji-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-enumerated-reference-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-escaped-character-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-footnotes-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-gfm-issues-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-gfm-strikethrough-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-gfm-tasklist-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-gfm-users-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-gitlab-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-jekyll-front-matter-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-jekyll-tag-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-media-tags-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-resizable-image-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-macros-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-ins-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-xwiki-macros-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-superscript-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-tables-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-toc-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-typographic-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-wikilink-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-yaml-front-matter-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-ext-youtube-embedded-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-html2md-converter-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/jsoup-1.15.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-jira-converter-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-pdf-converter-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/icu4j-72.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/openhtmltopdf-core-1.0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/openhtmltopdf-pdfbox-1.0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/pdfbox-2.0.24.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/fontbox-2.0.24.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/xmpbox-2.0.24.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/graphics2d-0.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/openhtmltopdf-rtl-support-1.0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-profile-pegdown-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-ast-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/annotations-24.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-builder-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-collection-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-data-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-dependency-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-format-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-html-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-misc-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-options-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-sequence-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-util-visitor-0.64.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/swingfx-markdown-preview-all/flexmark-youtrack-converter-0.64.8.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
