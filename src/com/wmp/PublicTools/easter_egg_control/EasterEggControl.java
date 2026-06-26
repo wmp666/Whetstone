@@ -82,8 +82,11 @@ public class EasterEggControl {
             //从彩蛋列表中获取并逐一处理
             if (o instanceof JSONObject jsonObject) {
                 LoadedEasterEggUnit easterEggUnit = getLoadedEasterEggUnit(jsonObject, varMap, easterEggUnits);
-                if (easterEggUnit != null) {
-                    loadedEasterEggUnits.add(easterEggUnit);
+                try {
+                    if (easterEggUnit != null && easterEggUnit.easterEggUnit() != null) {
+                        loadedEasterEggUnits.add(easterEggUnit);
+                    }
+                } catch (Exception _) {
                 }
             }
         }

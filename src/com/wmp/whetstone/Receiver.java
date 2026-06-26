@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class Receiver {
     public static void initSever(int port) {
-        new Thread(() -> {
+        Thread.startVirtualThread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(port)) {
                 Log.info.print(Receiver.class.toString(), "服务器已启动，等待客户端传入数据...");
                 while (true) {
@@ -25,7 +25,7 @@ public class Receiver {
                         String msg = new String(data, StandardCharsets.UTF_8);
 
                         Log.info.print(Receiver.class.toString(), "接收到数据：" + msg);
-                        new Thread(()->runCommand(msg)).start();
+                        Thread.startVirtualThread(()->runCommand(msg));
                     } catch (Exception e) {
                         Log.err.print(Receiver.class, "接收数据失败", e);
                     }
@@ -33,7 +33,7 @@ public class Receiver {
             } catch (Exception e) {
                 Log.err.print(Receiver.class, "服务器启动失败", e);
             }
-        }).start();
+        });
     }
 
     public static void runCommand(String command) {
@@ -44,8 +44,17 @@ public class Receiver {
 
             CTInfo.easterEggUnits.stream().filter(easterEggUnit ->
                     list[0].equals(easterEggUnit.getID())).forEach(easterEggUnit -> {
-                new Thread(() -> easterEggUnit.run(Arrays.copyOfRange(list, 1, list.length))).start();
-            });
+                        if (list.length < 4){//id funcName func args...
+                            String[] args = Arrays.copyOf(Arrays.copyOfRange(list, 1, list.length), 3);
+                            for (int i = 0; i < args.length; i++) {
+                                if (args[i] == null) {
+                                    args[i] = "";
+                                }
+                            }
+                            easterEggUnit.run(args);
+                        }else easterEggUnit.run(Arrays.copyOfRange(list, 1, list.length));
+                    }
+            );
         } else if (command.startsWith("clear:EE:")) {
             //0-EEInfo 1-funcName
             String[] EEInfo = command.substring(9).split(";", 2);
@@ -54,7 +63,7 @@ public class Receiver {
         } else if (command.startsWith("refresh")) {
             CTInfo.init();
         } else if (command.startsWith("exit")) {
-            Runtime.getRuntime().halt(0);
+            Log.exit(0);
         } else {
             Log.warn.print(Receiver.class.toString(), "无效的命令");
         }

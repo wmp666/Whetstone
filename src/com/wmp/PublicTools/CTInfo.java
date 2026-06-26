@@ -1,7 +1,6 @@
 package com.wmp.PublicTools;
 
 import com.wmp.Main;
-import com.wmp.PublicTools.appFileControl.IconControl;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfo;
 import com.wmp.PublicTools.appFileControl.appInfoControl.AppInfoControl;
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
@@ -50,7 +49,7 @@ public class CTInfo {
     public static void init() {
         try {
             basicInf.load(new FileReader(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "settings.properties")));
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("读取设置文件失败");
         }
 

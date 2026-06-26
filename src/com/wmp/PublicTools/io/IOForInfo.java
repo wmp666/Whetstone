@@ -92,7 +92,7 @@ public class IOForInfo {
             }
             directory.delete();
         } catch (Exception e) {
-            Log.err.print(IOForInfo.class, "创建文件失败", e);
+            Log.err.print(IOForInfo.class, "删除文件失败", e);
             return false;
         }
         return true;

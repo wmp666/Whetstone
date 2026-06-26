@@ -4,10 +4,18 @@ package com.wmp.PublicTools.printLog;
 import com.wmp.PublicTools.UITools.CTFont;
 import com.wmp.PublicTools.UITools.CTFontSizeStyle;
 import com.wmp.PublicTools.UITools.GetIcon;
+import com.wmp.PublicTools.io.GetPath;
 import com.wmp.whetstone.frame.MainWindow;
+import org.apache.commons.logging.LogFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +24,7 @@ import static com.wmp.PublicTools.CTInfo.basicInf;
 
 public class Log {
     public static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/icon/icon.png"), 48, 48, false).getImage(), "???");
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(Log.class);
 
     public static InfoLogStyle info = new InfoLogStyle(LogStyle.INFO);
     public static WarnLogStyle warn = new WarnLogStyle(LogStyle.WARN);
@@ -82,12 +91,44 @@ public class Log {
 
 
     public static void exit(int status) {
-        JOptionPane.showInternalMessageDialog(null, "null");
+        try {
+            //获取密码
+            String password = basicInf.getOrDefault("password", "").toString();
 
-        if (JOptionPane.showInputDialog(null, "请输入密码").equals("Hzb_098417")) {
-            System.exit(status);
+            if (password.isEmpty()){
+                String userInputPassword = JOptionPane.showInputDialog(null, "请设置密码");
+                basicInf.put("password", encryption(userInputPassword));
+                try {
+                    basicInf.store(new FileWriter(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "settings.properties")), "save new password.");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "保存失败!", "错误", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            if (encryption(JOptionPane.showInputDialog(null, "请输入密码")).equals(password)) {
+                Runtime.getRuntime().halt(status);
+            }
+        } catch (NoSuchAlgorithmException _) {
+
         }
 
+    }
+
+    private static String encryption(String s) throws NoSuchAlgorithmException {
+        MessageDigest sha = null;
+        sha = MessageDigest.getInstance("SHA");
+
+        byte[] byteArray = s.getBytes(StandardCharsets.UTF_8);
+        byte[] md5Bytes = sha.digest(byteArray);
+        StringBuffer hexValue = new StringBuffer();
+        for (int i = 0; i < md5Bytes.length; i++) {
+            int val = ((int) md5Bytes[i]) & 0xff;
+            if (val < 16) {
+                hexValue.append("0");
+            }
+            hexValue.append(Integer.toHexString(val));
+        }
+        return hexValue.toString();
     }
 
     public static void systemPrint(LogStyle style, String owner, String logInfo) {
