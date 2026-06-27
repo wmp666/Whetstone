@@ -3,11 +3,14 @@ package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
 import com.sun.jna.Function;
 import com.sun.jna.NativeLibrary;
 import com.wmp.PublicTools.CTInfo;
+import com.wmp.PublicTools.easter_egg_control.FuncArgUnit;
+import com.wmp.PublicTools.easter_egg_control.FuncArgsUnit;
 import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 import com.wmp.PublicTools.easter_egg_control.var.Var;
 import com.wmp.PublicTools.printLog.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -150,6 +153,44 @@ public final class DLLEasterEggUnit extends BasicEasterEggUnit {
             }
             Log.info.print(DLLEasterEggUnit.class.toString(), "获取的方法帮助(Array)：" + funcHelpUnits);
             return funcHelpUnits.toArray(new FuncHelpUnit[0]);
+        } catch (Error | Exception e) {
+            //Log.err.print(DLLEasterEggUnit.class, "dll作者未写该方法\n" + e);
+        }
+        return null;
+    }
+
+    @Override
+    public FuncArgsUnit[] funcArgs() {
+        try {
+            Function function = dll.getFunction("funcArgs");
+            String s = function.invokeString(new Object[0], false);
+            Log.info.print(DLLEasterEggUnit.class.toString(), "获取的方法帮助：" + s);
+
+            //分割成方法列表
+            String[] funcArgsList = s.split(";");//funcName|var(type:name:help:default)|var
+            ArrayList<FuncArgsUnit> funcArgsUnits = new ArrayList<>();
+            //FuncHelpUnit[] funcHelpUnits = new FuncHelpUnit[funcArgs.length];
+            for (String string : funcArgsList) {
+                String[] strFuncArgs = string.split("\\|");//funcName var1 var2 ...
+                if (strFuncArgs.length >= 2) {
+
+                    funcArgsUnits.add(new FuncArgsUnit(strFuncArgs[0],
+                            //var1 var2 ...
+                            Arrays.stream(strFuncArgs, 1, strFuncArgs.length).map(str -> {
+                                //str: var: type:name:help(:default)
+                                //将数据转换为Java类型——FuncArgUnit
+                                String[] varInfo = str.split(":");
+                                var type = varInfo[0];
+                                var name = varInfo[1];
+                                var help = varInfo[2];
+                                var isHasDefault = varInfo.length >= 4;
+                                var defaultValue = isHasDefault ? varInfo[3] : null;
+                                return new FuncArgUnit(type, name, help, isHasDefault, defaultValue);
+                            }).toArray(FuncArgUnit[]::new)));
+                }
+            }
+            Log.info.print(DLLEasterEggUnit.class.toString(), "获取的方法帮助(Array)：" + funcArgsUnits);
+            return funcArgsUnits.toArray(FuncArgsUnit[]::new);
         } catch (Error | Exception e) {
             //Log.err.print(DLLEasterEggUnit.class, "dll作者未写该方法\n" + e);
         }

@@ -1,5 +1,6 @@
 package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
 
+import com.wmp.PublicTools.easter_egg_control.FuncArgsUnit;
 import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 
 public abstract class BasicEasterEggUnit {
@@ -30,6 +31,10 @@ public abstract class BasicEasterEggUnit {
      * @return 方法帮助
      */
     public FuncHelpUnit[] funcHelps() {
+        return null;
+    }
+
+    public FuncArgsUnit[] funcArgs(){
         return null;
     }
 

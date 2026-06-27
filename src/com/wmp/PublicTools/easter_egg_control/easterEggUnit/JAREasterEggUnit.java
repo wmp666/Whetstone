@@ -1,6 +1,7 @@
 package com.wmp.PublicTools.easter_egg_control.easterEggUnit;
 
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
+import com.wmp.PublicTools.easter_egg_control.FuncArgsUnit;
 import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
 import com.wmp.PublicTools.printLog.Log;
 
@@ -146,6 +147,16 @@ public final class JAREasterEggUnit extends BasicEasterEggUnit {
             return (FuncHelpUnit[]) EEUnit_class.getDeclaredMethod("funcHelps").invoke(temp);
         } catch (Exception e) {
             Log.err.print(EasterEggControl.class, "运行[" + file.getName() + "]的[funcHelps]方法失败", e);
+            return null;
+        }
+    }
+
+    @Override
+    public FuncArgsUnit[] funcArgs() {
+        try {
+            return (FuncArgsUnit[]) EEUnit_class.getDeclaredMethod("funcArgs").invoke(temp);
+        } catch (Exception e) {
+            Log.err.print(EasterEggControl.class, "运行[" + file.getName() + "]的[funcArgs]方法失败", e);
             return null;
         }
     }

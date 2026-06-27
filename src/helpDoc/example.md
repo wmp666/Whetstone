@@ -69,6 +69,7 @@ extern "C" MYDLL_API extern "C" __declspec(dllexport) const char* getID();
 extern "C" MYDLL_API extern "C" __declspec(dllexport) const char* getVersion();
 extern "C" MYDLL_API extern "C" __declspec(dllexport) const char* help();
 extern "C" MYDLL_API extern "C" __declspec(dllexport) const char* funcHelps();
+extern "C" MYDLL_API extern "C" __declspec(dllexport) const char* funcArgs();
 ```
 
 ### 彩蛋文件
@@ -95,7 +96,11 @@ extern "C" __declspec(dllexport) const char* help()
 }
 extern "C" __declspec(dllexport) const char* funcHelps()
 {
-    return"方法名|方法帮助 + 参数作用;方法二|...;...";
+    return "方法名|方法帮助 + 参数作用;方法二|...;...";
+}
+extern "C" __declspec(dllexport) const char* funcArgs()
+{
+    return "方法名|类型:变量名:帮助(:默认值)|类型:变量2名:帮助(:默认值)|...;方法2名|...;...";
 }
 ```
 

@@ -37,7 +37,7 @@ public class Main {
      *      <li>...
      * </ul>
      */
-    public static final String developVersion = "2.3.0";
+    public static final String developVersion = "2.4.0";
 
     private static final TreeMap<String, StartupParameters> allArgs = new TreeMap<>();
     public static ArrayList<String> argsList = new ArrayList<>();

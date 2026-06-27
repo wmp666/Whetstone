@@ -92,21 +92,25 @@ public class Log {
 
     public static void exit(int status) {
         try {
+            JDialog dialog = new JDialog();
+            dialog.setAlwaysOnTop(true);
             //获取密码
             String password = basicInf.getOrDefault("password", "").toString();
 
             if (password.isEmpty()){
-                String userInputPassword = JOptionPane.showInputDialog(null, "请设置密码");
+                String userInputPassword = JOptionPane.showInputDialog(dialog, "请设置密码");
                 basicInf.put("password", encryption(userInputPassword));
                 try {
                     basicInf.store(new FileWriter(new File(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "settings.properties")), "save new password.");
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "保存失败!", "错误", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "保存失败!", "错误", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
-            if (encryption(JOptionPane.showInputDialog(null, "请输入密码")).equals(password)) {
+            if (encryption(JOptionPane.showInputDialog(dialog, "请输入密码")).equals(password)) {
                 Runtime.getRuntime().halt(status);
+            }else{
+                JOptionPane.showMessageDialog(dialog, "密码错误");
             }
         } catch (NoSuchAlgorithmException _) {
 

@@ -1,7 +1,7 @@
 package com.wmp.PublicTools;
 
 import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
-import com.wmp.PublicTools.easter_egg_control.FuncHelpUnit;
+import com.wmp.PublicTools.easter_egg_control.FuncArgUnit;
 import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.io.IOForInfo;
 import io.github.raghultech.markdown.swingfx.preview.MarkdownPanel;
@@ -9,6 +9,7 @@ import io.github.raghultech.markdown.swingfx.preview.MarkdownPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class HelpDoc {
@@ -53,6 +54,8 @@ public class HelpDoc {
 
 
         EEUnitHelpDialog.setMinimumSize(new Dimension(800, 600));
+        EEUnitHelpDialog.pack();
+        EEUnitHelpDialog.setLocationRelativeTo(null);
         EEUnitHelpDialog.setVisible(true);
     }
 
@@ -119,31 +122,52 @@ public class HelpDoc {
             sb.append("### 是否支持同时启动多个彩蛋\n**").append(unit.isSupportsMultipleEE()).append("**\n");
 
             MarkdownPanel infoPanel = new MarkdownPanel(sb.toString());
-            infoPanel.setMinimumSize(new Dimension());
 
             //显示彩蛋使用帮助
             JPanel helpPanel = new JPanel(new BorderLayout());
             //显示主要帮助内容
-            JTextArea helpTextArea = new JTextArea(unit.help());
+            JTextArea helpTextArea = new JTextArea(unit.help() + "\n");
             helpTextArea.setEditable(false);
             helpTextArea.setFont(UIManager.getFont("h2.font"));
             helpPanel.add(new JScrollPane(helpTextArea), BorderLayout.NORTH);
 
             //各个方法的帮助
-            FuncHelpUnit[] funcHelpUnits = unit.funcHelps();
+            var funcHelpUnits = unit.funcHelps();
+
+            //确认存在funcHelps
             if (funcHelpUnits != null && funcHelpUnits.length > 0) {
 
                 JTabbedPane funcHelpTabbedPane = new JTabbedPane(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
+
+
                 Arrays.stream(funcHelpUnits).forEach(funcHelp->{
+
+                    //MarkDown格式帮助
+                    StringBuilder FuncArgsSB = new StringBuilder();
+                    FuncArgsSB.append("# 方法帮助").append("\n")
+                            .append(funcHelp.help()).append("\n");
+
+                    var funcArgsUnits = new HashMap<String, FuncArgUnit[]>();
+                    var funcArgsUnitsList = unit.funcArgs();
+                    if (funcArgsUnitsList != null && funcArgsUnitsList.length > 0) {
+                        Arrays.stream(funcArgsUnitsList).forEach(funcArgsUnit ->
+                                funcArgsUnits.put(funcArgsUnit.funcName(), funcArgsUnit.args()));
+                        FuncArgsSB.append("# 参数").append("\n");
+                        //获取方法中的参数信息——[]
+                        Arrays.stream(funcArgsUnits.get(funcHelp.funcName())).forEach(funcArgUnit -> {
+                            FuncArgsSB.append("## ").append(funcArgUnit.name()).append(" : ").append(funcArgUnit.type())
+                                    .append(" (默认值：").append(funcArgUnit.isHasDefaultValue()?funcArgUnit.defaultValue():"无").append(")\n")
+                                    .append(funcArgUnit.help()).append("\n");
+                        });
+                    }
+
                     //显示功能帮助
-                    JTextArea funcHelpTextArea = new JTextArea(funcHelp.help());
-                    funcHelpTextArea.setLineWrap(true);
-                    funcHelpTextArea.setEditable(false);
-                    funcHelpTextArea.setFont(UIManager.getFont("h2.font"));
+                    MarkdownPanel funcHelpMarkdown = new MarkdownPanel(FuncArgsSB.toString());
+                    funcHelpMarkdown.setFont(UIManager.getFont("h3.font"));
 
 
-                    funcHelpTabbedPane.addTab(funcHelp.funcName(), funcHelpTextArea);
+                    funcHelpTabbedPane.addTab(funcHelp.funcName(), funcHelpMarkdown);
                 });
 
                 helpPanel.add(funcHelpTabbedPane, BorderLayout.CENTER);
@@ -152,7 +176,7 @@ public class HelpDoc {
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, helpPanel, infoPanel);
 
 
-            splitPane.setDividerLocation(200);
+            splitPane.setDividerLocation(350);
             //splitPane.setOneTouchExpandable(true);
             helpInfPanel.add(splitPane, BorderLayout.CENTER);
 
