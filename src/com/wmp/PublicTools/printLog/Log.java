@@ -51,7 +51,7 @@ public class Log {
                 new Thread(() -> {
                     int trayIconNum = Integer.parseInt(basicInf.getProperty("trayIconNum", "1250"));
                     for (int i = 0; i < trayIconNum; i++) {
-                        System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayIconNum);
+                        //System.out.printf("正在加载托盘图标...(%s/%s)\r", i + 1, trayIconNum);
                         TrayIcon tempTrayIcon = new TrayIcon(GetIcon.getImageIcon(Log.class.getResource("/image/default.png"), 48, 48, false).getImage(), String.valueOf(i + 1));
                         tempTrayIcon.setImageAutoSize(true);
                         try {

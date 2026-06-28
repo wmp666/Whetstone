@@ -4,12 +4,14 @@ import com.wmp.PublicTools.easter_egg_control.EasterEggControl;
 import com.wmp.PublicTools.easter_egg_control.FuncArgUnit;
 import com.wmp.PublicTools.easter_egg_control.easterEggUnit.BasicEasterEggUnit;
 import com.wmp.PublicTools.io.IOForInfo;
+import com.wmp.PublicTools.printLog.Log;
 import io.github.raghultech.markdown.swingfx.preview.MarkdownPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class HelpDoc {
@@ -141,25 +143,57 @@ public class HelpDoc {
 
 
 
-                Arrays.stream(funcHelpUnits).forEach(funcHelp->{
+                Arrays.stream(funcHelpUnits).forEach(funcHelp->{//方法帮助
 
                     //MarkDown格式帮助
                     StringBuilder FuncArgsSB = new StringBuilder();
                     FuncArgsSB.append("# 方法帮助").append("\n")
                             .append(funcHelp.help()).append("\n");
 
-                    var funcArgsUnits = new HashMap<String, FuncArgUnit[]>();
-                    var funcArgsUnitsList = unit.funcArgs();
-                    if (funcArgsUnitsList != null && funcArgsUnitsList.length > 0) {
-                        Arrays.stream(funcArgsUnitsList).forEach(funcArgsUnit ->
-                                funcArgsUnits.put(funcArgsUnit.funcName(), funcArgsUnit.args()));
-                        FuncArgsSB.append("# 参数").append("\n");
-                        //获取方法中的参数信息——[]
-                        Arrays.stream(funcArgsUnits.get(funcHelp.funcName())).forEach(funcArgUnit -> {
-                            FuncArgsSB.append("## ").append(funcArgUnit.name()).append(" : ").append(funcArgUnit.type())
-                                    .append(" (默认值：").append(funcArgUnit.isHasDefaultValue()?funcArgUnit.defaultValue():"无").append(")\n")
-                                    .append(funcArgUnit.help()).append("\n");
-                        });
+                    try {
+                        //方法的参数单元Map 方法名->参数单元[]
+                        var funcArgsUnits = new HashMap<String, FuncArgUnit[]>(){
+                            @Override
+                            public String toString() {
+                                Iterator<Entry<String, FuncArgUnit[]>> i = entrySet().iterator();
+                                if (! i.hasNext())
+                                    return "{}";
+
+                                StringBuilder sb = new StringBuilder();
+                                sb.append('{');
+                                for (;;) {
+                                    Entry<String, FuncArgUnit[]> e = i.next();
+                                    String key = e.getKey();
+                                    FuncArgUnit[] value = e.getValue();
+                                    sb.append(key);
+                                    sb.append('=');
+                                    sb.append(Arrays.toString(value));
+                                    if (! i.hasNext())
+                                        return sb.append('}').toString();
+                                    sb.append(',').append(' ');
+                                }
+                            }
+                        };
+                        //获取方法参数单元
+                        var funcArgsUnitsList = unit.funcArgs();
+                        if (funcArgsUnitsList != null && funcArgsUnitsList.length > 0) {
+                            //将方法参数单元转换成Map
+                            Arrays.stream(funcArgsUnitsList).forEach(funcArgsUnit ->
+                                    funcArgsUnits.put(funcArgsUnit.funcName(), funcArgsUnit.args()));
+                            Log.info.print("HelpDoc", "获取参数信息成功\n" + funcArgsUnits);
+                            FuncArgsSB.append("# 参数").append("\n");
+                            //获取方法中的参数信息——[]
+                            var array = funcArgsUnits.get(funcHelp.funcName());
+                            if (array != null) {
+                                Arrays.stream(array).forEach(funcArgUnit -> {
+                                    FuncArgsSB.append("## ").append(funcArgUnit.name()).append(" : ").append(funcArgUnit.type())
+                                            .append(" (默认值：").append(funcArgUnit.isHasDefaultValue()?funcArgUnit.defaultValue():"无").append(")\n")
+                                            .append(funcArgUnit.help()).append("\n");
+                                });
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.err.print(HelpDoc.class, "获取参数信息失败", e);
                     }
 
                     //显示功能帮助
