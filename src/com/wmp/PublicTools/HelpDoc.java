@@ -119,7 +119,9 @@ public class HelpDoc {
                     .append("### 彩蛋版本\n**").append(unit.getVersion()).append("**\n");
             //兼容性警告
             if (!EasterEggControl.isCompatible(unit.getTargetVersion(), CTInfo.DEVELOP_VERSION)) {
-                sb.append("### ~~彩蛋开发版本\n**").append(unit.getTargetVersion()).append("**\n");
+                sb.append("### ~~彩蛋开发版本\n**").append(unit.getTargetVersion()).append("**~~\n");
+            } else{
+                sb.append("### 彩蛋开发版本\n**").append(unit.getTargetVersion()).append("**\n");
             }
             sb.append("### 是否支持同时启动多个彩蛋\n**").append(unit.isSupportsMultipleEE()).append("**\n");
 
