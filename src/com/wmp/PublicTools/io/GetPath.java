@@ -8,6 +8,7 @@ public class GetPath {
     public static final int APPLICATION_PATH = 1;
     public static final int SOURCE_FILE_PATH = 0;
 
+    private static String userProgramPath = null;
 
     /**
      * 获取应用程序路径
@@ -27,6 +28,10 @@ public class GetPath {
      * 获取程序真实所在目录（兼容管理员权限模式）
      */
     private static File getProgramDirectory() throws URISyntaxException {
+        if (userProgramPath != null) {
+            return new File(userProgramPath);
+        }
+
         // 通过类加载器获取代码源位置
         File jarFile = new File(
                 GetPath.class
@@ -45,4 +50,8 @@ public class GetPath {
         }
     }
 
+
+    public static void setUserProgramPath(String userProgramPath) {
+        GetPath.userProgramPath = userProgramPath;
+    }
 }

@@ -27,7 +27,7 @@ public class Main {
      * d:只修复的问题,问题较少<br>
      * e:测试版本号
      */
-    public static final String version = "2.6.2";
+    public static final String version = "2.6.3";
     /**
      * 最多三位，用于判断开发Jar文件所需文件的更新情况<br>
      * 例如:
@@ -49,6 +49,7 @@ public class Main {
 
         allArgs.put("无视兼容问题", StartupParameters.creative("/IC", "-IC"));
         allArgs.put("BasicDataPath", StartupParameters.creative("/BasicDataPath", "-BasicDataPath"));
+        allArgs.put("修改程序路径", StartupParameters.creative("/resetAppPath", "-resetAppPath"));
 
         allArgs.put("帮助", StartupParameters.creative("/help", "-help"));
 
@@ -63,6 +64,10 @@ public class Main {
         }
 
         FlatMacLightLaf.setup();
+
+        if (isHasTheArg("修改程序路径")) {
+            GetPath.setUserProgramPath(getTheArgNextArg("修改程序路径"));
+        }
 
         if (isHasTheArg("帮助")) {
             HelpDoc.help();
